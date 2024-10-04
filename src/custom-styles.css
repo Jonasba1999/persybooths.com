@@ -1,0 +1,117 @@
+.swiper-bullet {
+	height: 0.25rem;
+	width: 0.25rem;
+	opacity: 0.3;
+	background-color: black;
+	display: inline-block;
+	border-radius: 100%;
+	transition: all 0.2s ease;
+}
+
+.home-features_modal-btn {
+	animation: pulse-animation 2s infinite;
+}
+
+@keyframes pulse-animation {
+	0% {
+		box-shadow: 0 0 0 0px rgba(202, 200, 242, 0.4);
+	}
+	100% {
+		box-shadow: 0 0 0 10px rgba(202, 200, 242, 0);
+	}
+}
+
+.swiper-bullet.is-active {
+	opacity: 1;
+	height: 0.375rem;
+	width: 0.375rem;
+}
+[data-cursor-animation="trigger"] {
+	cursor: default;
+}
+[data-cursor-animation="trigger"]:hover {
+	cursor: none;
+}
+
+/* Reasons slider  */
+
+.swiper-slide {
+	height: auto !important;
+}
+
+.reasons-slider_btn-next.is-disabled .reasons-slider_nav-icon,
+.reasons-slider_btn-prev.is-disabled .reasons-slider_nav-icon {
+	color: var(--text-colors--medium-grey);
+}
+
+/* Quote modal */
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+input[type="number"] {
+	-moz-appearance: textfield;
+}
+
+.form_select-toggle.w--open .form_select-icon {
+	transform: rotate(180deg);
+}
+
+.quote-modal_qty-field {
+	border: none;
+	background-color: transparent;
+	width: 2rem;
+	height: 2rem;
+	margin: 0px;
+	padding: 0px;
+	text-align: center;
+}
+
+/* Accordions */
+
+.product-spec_tech_accordion-item.is-open .product-spec_accordion_line.is-vertical {
+	display: none;
+}
+.product-spec_tech_accordion-item.is-open .product-spec_accordion_btn {
+	background-color: var(--background-colors--medium-grey);
+}
+.product-spec_tech_accordion-item.is-open .product-spec_tech_trigger-wrap {
+	background-color: var(--background-colors--grey);
+}
+
+.product-mobility_accordion-item.is-open .product-mobility_accordion-wrap {
+	padding-top: 1.5rem;
+	padding-bottom: 1.5rem;
+	background-color: var(--background-colors--white-asparagus);
+	border-radius: 0.625rem;
+}
+.product-mobility_accordion-item.is-open {
+	border-bottom: none;
+	background-color: white;
+}
+
+.product-faq_accordion_item:hover .product-faq_accordion_btn {
+	background-color: var(--background-colors--lavender) !important;
+}
+.product-faq_accordion_item-wrap.is-open .product-faq_accordion_btn {
+	background-color: var(--background-colors--grey);
+}
+.product-faq_accordion_item-wrap.is-open .product-faq_accordion_btn-line.is-vertical {
+	display: none;
+}
+
+/* Product features slider */
+
+.product-features_nav-btn.is-disabled {
+	display: none;
+}
+
+.header[data-header-sticky="false"] {
+	position: static;
+	margin-top: 1rem;
+	margin-left: 1rem;
+	margin-right: 1rem;
+}
