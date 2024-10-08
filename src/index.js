@@ -98,7 +98,7 @@ function boothScrollAnimation() {
 	});
 }
 
-function modalAnimation() {
+function sideModalAnimation() {
 	// Getting all modal triggers
 	const modalTriggers = document.querySelectorAll("[data-modal-trigger]");
 	if (modalTriggers.length === 0) return;
@@ -549,16 +549,17 @@ function accordionAnimation() {
 		accordionItems.forEach((accordion) => {
 			const accordionTrigger = accordion.querySelector('[data-accordion="trigger"]');
 			const accordionExpandWrap = accordion.querySelector('[data-accordion="expand-wrap"]');
-			const expandHeight = accordionExpandWrap.offsetHeight;
 
-			const accordionTl = gsap.timeline({ paused: true });
+			const accordionTl = gsap.timeline({
+				paused: true,
+			});
 			accordionTl.fromTo(
 				accordionExpandWrap,
 				{
 					height: 0,
 				},
 				{
-					height: expandHeight,
+					height: "auto",
 					duration: animationDuration / 1000,
 					ease: "power3.inOut",
 				}
@@ -682,11 +683,110 @@ function popupAnimation() {
 	});
 }
 
+function mobileMenuAnimation() {
+	const mobileMenu = document.querySelector('[data-mobile-menu="menu"]');
+	if (!mobileMenu) return;
+
+	const menuTrigger = document.querySelector('[data-mobile-menu="trigger"]');
+	const menuWrap = mobileMenu.querySelector('[data-mobile-menu="wrap"]');
+	const menuOverlay = mobileMenu.querySelector('[data-mobile-menu="overlay"]');
+	const accordionButtons = document.querySelectorAll('[data-accordion="accordion-item"]');
+
+	// Change "auto" height value when accordion is activated for menu animation
+	accordionButtons.forEach((button) => {
+		button.addEventListener("click", () => {
+			setTimeout(() => {
+				menuTl.invalidate();
+			}, 500);
+		});
+	});
+
+	let menuOpen = false;
+
+	let mm = gsap.matchMedia();
+
+	mm.add("(max-width: 991px)", () => {
+		menuTl = gsap.timeline({ paused: true });
+
+		menuTl
+			.set(mobileMenu, {
+				display: "block",
+			})
+			.fromTo(
+				mobileMenu,
+				{
+					height: 0,
+				},
+				{
+					height: "auto",
+					duration: 0.7,
+					ease: "power3.inOut",
+				}
+			)
+			.fromTo(
+				menuOverlay,
+				{
+					opacity: 0,
+				},
+				{
+					opacity: 0.1,
+					duration: 0.3,
+					ease: "linear",
+				},
+				"<"
+			);
+
+		menuTrigger.addEventListener("click", () => {
+			if (!menuOpen) {
+				menuTrigger.textContent = "Close";
+				menuTl.play();
+				menuOpen = true;
+			} else {
+				menuTrigger.textContent = "Menu";
+				menuTl.reverse();
+				menuOpen = false;
+			}
+		});
+
+		menuOverlay.addEventListener("click", () => {
+			menuTrigger.textContent = "Menu";
+			menuTl.reverse();
+			menuOpen = false;
+		});
+	});
+}
+
+function productFeaturesVideo() {
+	const featureItems = document.querySelectorAll(".product-features_wrap");
+	if (featureItems.length === 0) return;
+
+	featureItems.forEach((item) => {
+		const featureVideo = item.querySelector("video");
+		const featureImage = item.querySelector(".product-features_image");
+		console.log(featureVideo);
+		item.addEventListener("mouseenter", () => {
+			gsap.to(featureImage, {
+				opacity: 0,
+				duration: 0.3,
+			});
+			featureVideo.play();
+		});
+		item.addEventListener("mouseleave", () => {
+			gsap.to(featureImage, {
+				opacity: 1,
+				duration: 0.3,
+			});
+			featureVideo.currentTime = 0;
+			featureVideo.pause();
+		});
+	});
+}
+
 document.addEventListener("DOMContentLoaded", () => {
 	gsap.registerPlugin(ScrollTrigger);
 	dottedBoothPin();
 	boothScrollAnimation();
-	modalAnimation();
+	sideModalAnimation();
 	indexFeaturesSlider();
 	customCursorAnimation();
 	usageHoverAnimation();
@@ -704,4 +804,6 @@ document.addEventListener("DOMContentLoaded", () => {
 	productMobilitySlider();
 	productStickyNav();
 	popupAnimation();
+	mobileMenuAnimation();
+	productFeaturesVideo();
 });

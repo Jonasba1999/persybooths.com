@@ -8,7 +8,8 @@
 	transition: all 0.2s ease;
 }
 
-.home-features_modal-btn {
+.home-features_modal-btn,
+.home-mobile-features_modal-btn {
 	animation: pulse-animation 2s infinite;
 }
 
@@ -114,4 +115,9 @@ input[type="number"] {
 	margin-top: 1rem;
 	margin-left: 1rem;
 	margin-right: 1rem;
+}
+
+/* MOBILE MENU */
+.mobile-menu_accordion-item.is-open .mobile-menu_accordion-btn-line.is-vertical {
+	display: none;
 }
