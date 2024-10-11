@@ -7,9 +7,15 @@
 	border-radius: 100%;
 	transition: all 0.2s ease;
 }
+/* Adjust to always display swiper correctly on front-end when in designer grid or flex column is used for visibility */
+.swiper-wrapper {
+	flex-direction: row !important;
+	display: flex !important;
+	gap: 0 !important;
+}
 
-.home-features_modal-btn,
-.home-mobile-features_modal-btn {
+.features-scroll_modal-btn,
+.mobile-features_modal-btn {
 	animation: pulse-animation 2s infinite;
 }
 
@@ -73,30 +79,52 @@ input[type="number"] {
 
 /* Accordions */
 
-.product-spec_tech_accordion-item.is-open .product-spec_accordion_line.is-vertical {
+.product-spec_tech_accordion-item.is-open .product-spec_accordion_line.is-vertical,
+.product-spec_accordion_item.is-open .product-spec_accordion_line.is-vertical {
 	display: none;
 }
-.product-spec_tech_accordion-item.is-open .product-spec_accordion_btn {
+.product-spec_tech_accordion-item.is-open .product-spec_accordion_btn,
+.product-spec_accordion_item.is-open .product-spec_accordion_btn {
 	background-color: var(--background-colors--medium-grey);
 }
 .product-spec_tech_accordion-item.is-open .product-spec_tech_trigger-wrap {
 	background-color: var(--background-colors--grey);
 }
 
-.product-mobility_accordion-item.is-open .product-mobility_accordion-wrap {
+.product-mobility_accordion_item.is-open .product-mobility_accordion_wrap {
 	padding-top: 1.5rem;
 	padding-bottom: 1.5rem;
 	background-color: var(--background-colors--white-asparagus);
 	border-radius: 0.625rem;
 }
-.product-mobility_accordion-item.is-open {
+.product-mobility_accordion_item.is-open {
 	border-bottom: none;
 	background-color: white;
 }
 
-.product-faq_accordion_item:hover .product-faq_accordion_btn {
-	background-color: var(--background-colors--lavender) !important;
+.product-mobility_accordion_item.is-open .product-mobility_accordion_line.is-vertical {
+	display: none;
 }
+
+@media only screen and (min-width: 992px) {
+	.product-faq_accordion_item:hover .product-faq_accordion_btn {
+		background-color: var(--background-colors--lavender) !important;
+	}
+}
+
+@media only screen and (max-width: 767px) {
+	.product-spec_accordion_item.is-open .product-spec_accordion_title-wrap {
+		border-bottom: 1px solid var(--border-colors--grey);
+	}
+
+	.product-spec_tech_accordion-item.is-open {
+		background-color: var(--background-colors--grey);
+	}
+	.product-spec_tech_accordion-item.is-open .product-spec_tech_title-wrap {
+		border-color: var(--border-colors--medium-grey);
+	}
+}
+
 .product-faq_accordion_item-wrap.is-open .product-faq_accordion_btn {
 	background-color: var(--background-colors--grey);
 }
@@ -111,13 +139,39 @@ input[type="number"] {
 }
 
 .header[data-header-sticky="false"] {
-	position: static;
+	position: relative;
 	margin-top: 1rem;
 	margin-left: 1rem;
 	margin-right: 1rem;
+	top: 0rem;
+	left: 0rem;
+	right: 0rem;
+}
+
+@media only screen and (max-width: 991px) {
+	.header[data-header-sticky="false"] {
+		margin-top: 2rem;
+	}
+}
+
+@media only screen and (max-width: 767px) {
+	.header[data-header-sticky="false"] {
+		margin-top: 0.5rem;
+		margin-left: 0.5rem;
+		margin-right: 0.5rem;
+	}
 }
 
 /* MOBILE MENU */
 .mobile-menu_accordion-item.is-open .mobile-menu_accordion-btn-line.is-vertical {
+	display: none;
+}
+.mobile-menu_accordion-item.is-open .mobile-menu_accordion-trigger.has-border {
+	border: none;
+}
+
+/* PRODUCT OTHER PRODUCTS */
+
+.section_product-other .products_collection-item:nth-child(3) {
 	display: none;
 }

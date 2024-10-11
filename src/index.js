@@ -14,20 +14,24 @@ function dottedBoothPin() {
 	const dots = document.querySelector('[data-dots-pin="image"]');
 	if (!dots) return;
 
-	// Pinnning dotted booth image
-	let dotsPin = ScrollTrigger.create({
-		trigger: dots,
-		pin: dots,
-		pinSpacing: false,
-		start: "center center",
-		endTrigger: '[data-features-scroll="content-layer"]',
-		end: "top top",
-		onLeave: () => {
-			gsap.set(dots, { opacity: 0 });
-		},
-		onEnterBack: () => {
-			gsap.set(dots, { opacity: 1 });
-		},
+	let mm = gsap.matchMedia();
+
+	mm.add("(min-width: 992px)", () => {
+		// Pinnning dotted booth image
+		let dotsPin = ScrollTrigger.create({
+			trigger: dots,
+			pin: dots,
+			pinSpacing: false,
+			start: "center center",
+			endTrigger: '[data-features-scroll="content-layer"]',
+			end: "top top",
+			onLeave: () => {
+				gsap.set(dots, { opacity: 0 });
+			},
+			onEnterBack: () => {
+				gsap.set(dots, { opacity: 1 });
+			},
+		});
 	});
 }
 
@@ -73,7 +77,7 @@ function boothScrollAnimation() {
 		let tl = gsap.timeline({
 			scrollTrigger: {
 				toggleActions: "play none none reverse",
-				trigger: ".home-features_wrap",
+				trigger: ".features-scroll_wrap",
 				start: () => {
 					return index * animationBuffer + "px";
 				},
@@ -305,8 +309,18 @@ function reasonsSlider() {
 
 	const swiper = new Swiper(swiperTarget, {
 		modules: [Navigation],
-		slidesPerView: 4.5,
-		spaceBetween: 8,
+		slidesPerView: 1.3,
+		spaceBetween: 16,
+		breakpoints: {
+			992: {
+				slidesPerView: 4.5,
+				spaceBetween: 8,
+			},
+			768: {
+				slidesPerView: 2.7,
+				spaceBetween: 20,
+			},
+		},
 		// Navigation arrows
 		navigation: {
 			disabledClass: "is-disabled",
@@ -320,34 +334,38 @@ function reasonsSliderHover() {
 	const slides = document.querySelectorAll('[data-reasons-slider="slide"]');
 	if (!slides) return;
 
-	slides.forEach((slide, index) => {
-		const slideContent = slide.querySelector('[data-reasons-slider="content"]');
-		const slideDescription = slide.querySelector('[data-reasons-slider="description"]');
-		const slideCount = slide.querySelector('[data-reasons-slider="count"]');
-		let hoverTl = gsap.timeline({ paused: true });
+	let mm = gsap.matchMedia();
 
-		slideCount.textContent = index + 1;
+	mm.add("(min-width: 992px)", () => {
+		slides.forEach((slide, index) => {
+			const slideContent = slide.querySelector('[data-reasons-slider="content"]');
+			const slideDescription = slide.querySelector('[data-reasons-slider="description"]');
+			const slideCount = slide.querySelector('[data-reasons-slider="count"]');
+			let hoverTl = gsap.timeline({ paused: true });
 
-		hoverTl
-			.to(slideContent, {
-				backgroundColor: "#E8EFBD",
-				duration: 0.2,
-				y: "-0.5rem",
-			})
-			.to(
-				slideDescription,
-				{
-					y: "-100%",
+			slideCount.textContent = index + 1;
+
+			hoverTl
+				.to(slideContent, {
+					backgroundColor: "#E8EFBD",
 					duration: 0.2,
-				},
-				"<"
-			);
+					y: "-0.5rem",
+				})
+				.to(
+					slideDescription,
+					{
+						y: "-100%",
+						duration: 0.2,
+					},
+					"<"
+				);
 
-		slide.addEventListener("mouseover", () => {
-			hoverTl.play();
-		});
-		slide.addEventListener("mouseout", () => {
-			hoverTl.reverse();
+			slide.addEventListener("mouseover", () => {
+				hoverTl.play();
+			});
+			slide.addEventListener("mouseout", () => {
+				hoverTl.reverse();
+			});
 		});
 	});
 }
@@ -357,14 +375,28 @@ function testimonialsSlider() {
 	if (!swiperTarget) return;
 
 	const swiper = new Swiper(swiperTarget, {
-		modules: [Autoplay],
+		modules: [Autoplay, Pagination],
 		loop: true,
 		autoplay: {
 			delay: 4000,
 		},
-		slidesPerView: 1.5,
-		spaceBetween: 32,
+		slidesPerView: 1,
 		centeredSlides: true,
+		spaceBetween: 20,
+		breakpoints: {
+			768: {
+				slidesPerView: 1.5,
+			},
+			992: {
+				spaceBetween: 32,
+				slidesPerView: 1.5,
+			},
+		},
+		pagination: {
+			el: ".testimonials-slider_pagination",
+			bulletClass: "swiper-bullet",
+			bulletActiveClass: "is-active",
+		},
 	});
 }
 
@@ -439,52 +471,59 @@ function formSelectFieldColor() {
 }
 
 function productImagesSlider() {
-	const swiperTarget = document.querySelector(".product-hero_swiper");
-	if (!swiperTarget) return;
+	const swiperTargets = document.querySelectorAll(".product-hero_swiper");
+	if (swiperTargets.length === 0) return;
 
-	const swiper = new Swiper(swiperTarget, {
-		modules: [Pagination],
-		slidesPerView: 1,
-		loop: true,
-		spaceBetween: 0,
-		pagination: {
-			el: ".product-hero_swiper-pagination",
-			bulletClass: "swiper-bullet",
-			bulletActiveClass: "is-active",
-		},
+	swiperTargets.forEach((swiperTarget) => {
+		const swiper = new Swiper(swiperTarget, {
+			modules: [Pagination],
+			slidesPerView: 1,
+			loop: true,
+			spaceBetween: 0,
+			pagination: {
+				el: ".product-hero_swiper-pagination",
+				bulletClass: "swiper-bullet",
+				bulletActiveClass: "is-active",
+			},
+		});
 	});
 }
 
 function rotatingText() {
-	const words = gsap.utils.toArray(".product-hero_rotating-text");
+	const wordWraps = document.querySelectorAll('[data-rotating-text="wrap"]');
+	if (wordWraps.length === 0) return;
 
-	if (words.length === 0) return;
+	wordWraps.forEach((wrap) => {
+		const words = gsap.utils.toArray(".product-hero_rotating-text", wrap);
 
-	const tl = gsap.timeline({
-		repeat: -1,
-	});
-	gsap.set(words, {
-		yPercent: (i) => i && 100,
-		opacity: 1,
-	});
-	words.forEach((word, i) => {
-		const next = words[i + 1];
-		if (next) {
-			tl.to(word, { yPercent: -100 }, "+=1.5").to(next, { yPercent: 0 }, "<");
-		} else {
-			// Final word
-			tl.to(word, { yPercent: -100 }, "+=1.5").fromTo(
-				words[0],
-				{
-					yPercent: 100,
-				},
-				{
-					yPercent: 0,
-					immediateRender: false,
-				},
-				"<"
-			);
-		}
+		if (words.length === 0) return;
+
+		const tl = gsap.timeline({
+			repeat: -1,
+		});
+		gsap.set(words, {
+			yPercent: (i) => i && 100,
+			opacity: 1,
+		});
+		words.forEach((word, i) => {
+			const next = words[i + 1];
+			if (next) {
+				tl.to(word, { yPercent: -100 }, "+=1.5").to(next, { yPercent: 0 }, "<");
+			} else {
+				// Final word
+				tl.to(word, { yPercent: -100 }, "+=1.5").fromTo(
+					words[0],
+					{
+						yPercent: 100,
+					},
+					{
+						yPercent: 0,
+						immediateRender: false,
+					},
+					"<"
+				);
+			}
+		});
 	});
 }
 
@@ -494,8 +533,18 @@ function productFeaturesSlider() {
 
 	const swiper = new Swiper(swiperTarget, {
 		modules: [Navigation],
-		slidesPerView: 4,
-		spaceBetween: 20,
+		slidesPerView: 1.4,
+		spaceBetween: 16,
+		breakpoints: {
+			768: {
+				slidesPerView: 2.6,
+				spaceBetween: 20,
+			},
+			992: {
+				slidesPerView: 4,
+				spaceBetween: 20,
+			},
+		},
 		navigation: {
 			disabledClass: "is-disabled",
 			nextEl: ".product-features_btn-next",
@@ -590,7 +639,12 @@ function productMobilitySlider() {
 	const swiper = new Swiper(swiperTarget, {
 		slidesPerView: "auto",
 		loop: true,
-		spaceBetween: 20,
+		spaceBetween: 16,
+		breakpoints: {
+			992: {
+				spaceBetween: 20,
+			},
+		},
 	});
 }
 
@@ -598,28 +652,53 @@ function productStickyNav() {
 	const productBar = document.querySelector('[data-product-bar="sticky-bar"]');
 	if (!productBar) return;
 	const heroSection = document.querySelector('[data-product-bar="hero"]');
+	const footer = document.querySelector("footer");
 
-	let tl = gsap.timeline({
+	// Create the animation for showing the product bar when hero section leaves the viewport
+	let showTl = gsap.timeline({
 		scrollTrigger: {
 			trigger: heroSection,
 			start: "bottom top",
 			toggleActions: "play none none reverse",
 		},
 	});
-	tl.set(productBar, {
-		display: "flex",
-	}).fromTo(
-		productBar,
-		{
+	showTl
+		.set(productBar, {
+			display: "flex",
+		})
+		.fromTo(
+			productBar,
+			{
+				y: "1rem",
+				opacity: 0,
+			},
+			{
+				y: 0,
+				opacity: 1,
+				duration: 0.3,
+				ease: "power3.out",
+			}
+		);
+
+	// Create a separate animation for hiding the product bar when the footer enters the viewport
+	let hideTl = gsap.timeline({
+		scrollTrigger: {
+			trigger: footer,
+			start: "top bottom",
+			end: "top top",
+			toggleActions: "play none none reverse",
+		},
+	});
+	hideTl
+		.to(productBar, {
 			y: "1rem",
 			opacity: 0,
-		},
-		{
-			y: 0,
-			opacity: 1,
-			duration: 0.2,
-		}
-	);
+			duration: 0.3,
+			ease: "power3.out",
+		})
+		.set(productBar, {
+			display: "none",
+		});
 }
 
 function popupAnimation() {
@@ -692,26 +771,31 @@ function mobileMenuAnimation() {
 	const menuOverlay = mobileMenu.querySelector('[data-mobile-menu="overlay"]');
 	const accordionButtons = document.querySelectorAll('[data-accordion="accordion-item"]');
 
-	// Change "auto" height value when accordion is activated for menu animation
-	accordionButtons.forEach((button) => {
-		button.addEventListener("click", () => {
-			setTimeout(() => {
-				menuTl.invalidate();
-			}, 500);
-		});
-	});
-
 	let menuOpen = false;
 
 	let mm = gsap.matchMedia();
 
 	mm.add("(max-width: 991px)", () => {
-		menuTl = gsap.timeline({ paused: true });
+		// Change "auto" height value when accordion is activated for menu animation
+		accordionButtons.forEach((button) => {
+			button.addEventListener("click", () => {
+				setTimeout(() => {
+					menuTl.invalidate();
+				}, 500);
+			});
+		});
+
+		menuTl = gsap.timeline({
+			paused: true,
+			onStart: () => {
+				gsap.set(mobileMenu, { display: "block" }); // Ensure display is set to block when animation starts
+			},
+			onReverseComplete: () => {
+				gsap.set(mobileMenu, { display: "none" }); // Hide menu when reverse animation completes
+			},
+		});
 
 		menuTl
-			.set(mobileMenu, {
-				display: "block",
-			})
 			.fromTo(
 				mobileMenu,
 				{
@@ -763,7 +847,6 @@ function productFeaturesVideo() {
 	featureItems.forEach((item) => {
 		const featureVideo = item.querySelector("video");
 		const featureImage = item.querySelector(".product-features_image");
-		console.log(featureVideo);
 		item.addEventListener("mouseenter", () => {
 			gsap.to(featureImage, {
 				opacity: 0,
@@ -780,6 +863,84 @@ function productFeaturesVideo() {
 			featureVideo.pause();
 		});
 	});
+}
+
+function mobileUsageSwiper() {
+	const swiperTarget = document.querySelector('[data-usage-swiper="target"]');
+	if (!swiperTarget) return;
+
+	const swiper = new Swiper(swiperTarget, {
+		slidesPerView: 1.3,
+		spaceBetween: 16,
+		breakpoints: {
+			768: {
+				slidesPerView: 2.7,
+				spaceBetween: 20,
+			},
+		},
+	});
+}
+
+function mobileProductCustomizeSwiper() {
+	const swiperTarget = document.querySelector('[data-mobile-customize-slides="target"]');
+	if (!swiperTarget) return;
+
+	const breakpoint = window.matchMedia("(max-width: 991px)");
+
+	let swiper = null;
+	const wrapper = swiperTarget.querySelector('[data-mobile-customize-slides="wrap"]');
+	const slides = swiperTarget.querySelectorAll('[data-mobile-customize-slides="slide"]');
+
+	function addSwiperClasses() {
+		wrapper.classList.add("swiper-wrapper");
+		slides.forEach((slide) => {
+			slide.classList.add("swiper-slide");
+		});
+	}
+
+	function removeSwiperClasses() {
+		wrapper.classList.remove("swiper-wrapper");
+		slides.forEach((slide) => {
+			slide.classList.remove("swiper-slide");
+		});
+	}
+
+	function initSwiper() {
+		addSwiperClasses(); // Add classes before initializing Swiper
+		swiper = new Swiper(swiperTarget, {
+			slidesPerView: 1.1,
+			spaceBetween: 16,
+			breakpoints: {
+				768: {
+					spaceBetween: 20,
+					slidesPerView: 2,
+				},
+			},
+		});
+	}
+
+	function destroySwiper() {
+		if (swiper) {
+			swiper.destroy(true, true);
+			swiper = null;
+		}
+		removeSwiperClasses(); // Remove classes after destroying Swiper
+	}
+
+	breakpoint.addEventListener("change", (event) => {
+		if (event.matches) {
+			initSwiper();
+		} else {
+			destroySwiper();
+		}
+	});
+
+	// Try to init swiper when page loads if the breakpoint matches
+	if (breakpoint.matches) {
+		initSwiper();
+	} else {
+		destroySwiper();
+	}
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -806,4 +967,6 @@ document.addEventListener("DOMContentLoaded", () => {
 	popupAnimation();
 	mobileMenuAnimation();
 	productFeaturesVideo();
+	mobileUsageSwiper();
+	mobileProductCustomizeSwiper();
 });
