@@ -329,6 +329,13 @@ function reasonsSlider() {
 	const swiperTarget = document.querySelector(".reasons-slider_swiper");
 	if (!swiperTarget) return;
 
+	// Dynamic numeration of slides
+	const slides = document.querySelectorAll('[data-reasons-slider="slide"]');
+	slides.forEach((slide, index) => {
+		const slideCount = slide.querySelector('[data-reasons-slider="count"]');
+		slideCount.textContent = index + 1;
+	});
+
 	const swiper = new Swiper(swiperTarget, {
 		modules: [Navigation],
 		slidesPerView: 1.3,
@@ -362,10 +369,7 @@ function reasonsSliderHover() {
 		slides.forEach((slide, index) => {
 			const slideContent = slide.querySelector('[data-reasons-slider="content"]');
 			const slideDescription = slide.querySelector('[data-reasons-slider="description"]');
-			const slideCount = slide.querySelector('[data-reasons-slider="count"]');
 			let hoverTl = gsap.timeline({ paused: true });
-
-			slideCount.textContent = index + 1;
 
 			hoverTl
 				.to(slideContent, {
@@ -1008,7 +1012,7 @@ function homeHeroSlides() {
 		speed: 800,
 		loop: true,
 		pagination: {
-			el: ".home-hero_swiper-pagination",
+			el: ".home-hero_swiper-pagination ",
 			bulletClass: "swiper-bullet",
 			bulletActiveClass: "is-active",
 		},
