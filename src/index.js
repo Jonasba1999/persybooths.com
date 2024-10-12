@@ -1008,7 +1008,7 @@ function homeHeroSlides() {
 		speed: 800,
 		loop: true,
 		pagination: {
-			el: ".home-hero_swiper-desktop-pagination, .home-hero_swiper-mobile-pagination",
+			el: ".home-hero_swiper-pagination",
 			bulletClass: "swiper-bullet",
 			bulletActiveClass: "is-active",
 		},
