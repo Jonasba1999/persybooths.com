@@ -43,7 +43,7 @@ function boothScrollAnimation() {
 	const rightItems = document.querySelectorAll('[data-features-scroll="right-item"]');
 	const modalBtns = document.querySelectorAll('[data-features-scroll="modal-trigger"]');
 	const boothImg = document.querySelector('[data-features-scroll="booth-img"]');
-	const animationBuffer = 400;
+	const animationBuffer = 800;
 
 	// Calculations for boothPin end
 	const windowHeight = window.innerHeight;
@@ -107,6 +107,19 @@ function sideModalAnimation() {
 	const modalTriggers = document.querySelectorAll("[data-modal-trigger]");
 	if (modalTriggers.length === 0) return;
 	let activeTl = null;
+	const modalTimelines = {};
+
+	function openModal(modalTl, modal) {
+		modalTl.play();
+		activeTl = modalTl;
+		window.location.hash = modal.getAttribute("data-modal");
+	}
+
+	function closeModal() {
+		activeTl.reverse();
+		// Remove hash from URL without reloading the page
+		history.pushState("", document.title, window.location.pathname + window.location.search);
+	}
 
 	modalTriggers.forEach((trigger) => {
 		// Getting corresponding modal
@@ -148,20 +161,31 @@ function sideModalAnimation() {
 				"<"
 			);
 
+		// Store the timeline in an object using modalName as the key
+		modalTimelines[modalName] = { timeline: modalTl, modal: modal };
+
 		trigger.addEventListener("click", () => {
-			modalTl.play();
-			activeTl = modalTl;
+			openModal(modalTl, modal);
 		});
 
 		closeBtns.forEach((btn) => {
 			btn.addEventListener("click", () => {
-				activeTl.reverse();
+				closeModal();
 			});
 		});
 
 		modalOverlay.addEventListener("click", () => {
-			activeTl.reverse();
+			closeModal();
 		});
+	});
+
+	// Open popup if URL hash matches any popup's data-popup attribute on page load
+	window.addEventListener("load", () => {
+		const hash = window.location.hash.substring(1); // Remove the `#` from the hash
+		if (hash && modalTimelines[hash]) {
+			const { timeline, modal } = modalTimelines[hash];
+			openModal(timeline, modal);
+		}
 	});
 }
 
@@ -280,9 +304,8 @@ function usageHoverAnimation() {
 				}
 			});
 
-			// Optional: Show the corresponding image
 			if (image) {
-				gsap.to(image, { opacity: 1, duration: 0.2 });
+				gsap.to(image, { autoAlpha: 1, duration: 0.2 });
 			}
 		});
 
@@ -295,9 +318,8 @@ function usageHoverAnimation() {
 				});
 			});
 
-			// Optional: Hide the image
 			if (image) {
-				gsap.to(image, { opacity: 0, duration: 0.2 });
+				gsap.to(image, { autoAlpha: 0, duration: 0.2 });
 			}
 		});
 	});
@@ -351,10 +373,13 @@ function reasonsSliderHover() {
 					duration: 0.2,
 					y: "-0.5rem",
 				})
-				.to(
+				.fromTo(
 					slideDescription,
 					{
-						y: "-100%",
+						y: "100%",
+					},
+					{
+						y: "0%",
 						duration: 0.2,
 					},
 					"<"
@@ -485,44 +510,6 @@ function productImagesSlider() {
 				bulletClass: "swiper-bullet",
 				bulletActiveClass: "is-active",
 			},
-		});
-	});
-}
-
-function rotatingText() {
-	const wordWraps = document.querySelectorAll('[data-rotating-text="wrap"]');
-	if (wordWraps.length === 0) return;
-
-	wordWraps.forEach((wrap) => {
-		const words = gsap.utils.toArray(".product-hero_rotating-text", wrap);
-
-		if (words.length === 0) return;
-
-		const tl = gsap.timeline({
-			repeat: -1,
-		});
-		gsap.set(words, {
-			yPercent: (i) => i && 100,
-			opacity: 1,
-		});
-		words.forEach((word, i) => {
-			const next = words[i + 1];
-			if (next) {
-				tl.to(word, { yPercent: -100 }, "+=1.5").to(next, { yPercent: 0 }, "<");
-			} else {
-				// Final word
-				tl.to(word, { yPercent: -100 }, "+=1.5").fromTo(
-					words[0],
-					{
-						yPercent: 100,
-					},
-					{
-						yPercent: 0,
-						immediateRender: false,
-					},
-					"<"
-				);
-			}
 		});
 	});
 }
@@ -705,6 +692,23 @@ function popupAnimation() {
 	const popupTriggers = document.querySelectorAll("[data-popup-trigger]");
 	if (popupTriggers.length === 0) return;
 
+	// Store the timelines with their corresponding popups
+	const popupTimelines = {};
+
+	// Utility function to open popup
+	function openPopup(popupTl, popup) {
+		popupTl.play();
+		// Update the URL hash without reloading the page
+		window.location.hash = popup.getAttribute("data-popup");
+	}
+
+	// Utility function to close popup
+	function closePopup(popupTl) {
+		popupTl.reverse();
+		// Remove hash from URL without reloading the page
+		history.pushState("", document.title, window.location.pathname + window.location.search);
+	}
+
 	popupTriggers.forEach((trigger) => {
 		const popupName = trigger.getAttribute("data-popup-trigger");
 		const popup = document.querySelector(`[data-popup=${popupName}]`);
@@ -746,19 +750,31 @@ function popupAnimation() {
 				"<"
 			);
 
+		// Store the timeline in an object using popupName as the key
+		popupTimelines[popupName] = { timeline: popupTl, popup: popup };
+
 		trigger.addEventListener("click", (e) => {
 			e.stopPropagation();
 			e.preventDefault();
-			popupTl.play();
+			openPopup(popupTl, popup);
 		});
 
 		closeBtn.addEventListener("click", () => {
-			popupTl.reverse();
+			closePopup(popupTl);
 		});
 
 		popupOverlay.addEventListener("click", () => {
-			popupTl.reverse();
+			closePopup(popupTl);
 		});
+	});
+
+	// Open popup if URL hash matches any popup's data-popup attribute on page load
+	window.addEventListener("load", () => {
+		const hash = window.location.hash.substring(1); // Remove the `#` from the hash
+		if (hash && popupTimelines[hash]) {
+			const { timeline, popup } = popupTimelines[hash];
+			openPopup(timeline, popup);
+		}
 	});
 }
 
@@ -943,6 +959,97 @@ function mobileProductCustomizeSwiper() {
 	}
 }
 
+function rotatingText() {
+	const wordWraps = document.querySelectorAll('[data-rotating-text="wrap"]');
+	if (wordWraps.length === 0) return;
+
+	wordWraps.forEach((wrap) => {
+		const words = gsap.utils.toArray(".product-hero_rotating-text", wrap);
+
+		if (words.length === 0) return;
+
+		const tl = gsap.timeline({
+			repeat: -1,
+		});
+		gsap.set(words, {
+			yPercent: (i) => (i ? 100 : 0),
+			opacity: 1,
+		});
+
+		words.forEach((word, i) => {
+			const next = words[i + 1];
+
+			if (next) {
+				// Animate current word up and next word into view
+				tl.to(word, { yPercent: -100, duration: 0.8, ease: "power2.out" }, "+=1.5").to(next, { yPercent: 0, duration: 0.8, ease: "power2.out" }, "<");
+			} else {
+				// Final word: animate up and loop back to the first word
+				tl.to(word, { yPercent: -100, duration: 0.8, ease: "power2.out" }, "+=1.5").fromTo(
+					words[0],
+					{ yPercent: 100 },
+					{ yPercent: 0, immediateRender: false, duration: 0.8, ease: "power2.out" },
+					"<"
+				);
+			}
+		});
+	});
+}
+
+function homeHeroSlides() {
+	const swiperTarget = document.querySelector('[data-home-swiper="target"]');
+	if (!swiperTarget) return;
+
+	const swiper = new Swiper(swiperTarget, {
+		modules: [Pagination, Autoplay],
+		autoplay: {
+			delay: 3000,
+			disableOnInteraction: false,
+		},
+		speed: 800,
+		loop: true,
+		pagination: {
+			el: ".home-hero_swiper-desktop-pagination, .home-hero_swiper-mobile-pagination",
+			bulletClass: "swiper-bullet",
+			bulletActiveClass: "is-active",
+		},
+	});
+
+	// Rotating text animation
+	const rotatingTextWrap = document.querySelector('[data-swiper-text="wrap"]');
+	const words = gsap.utils.toArray(".product-hero_rotating-text", rotatingTextWrap);
+
+	gsap.set(words, {
+		yPercent: (i) => (i ? 100 : 0),
+		opacity: 1,
+	});
+
+	swiper.on("slideChangeTransitionStart", function (e) {
+		const currentSlideIndex = swiper.realIndex; // The current active slide index (ignores duplicates)
+		const totalSlides = swiper.slides.length; // The total number of slides, including duplicates in loop mode
+		const totalRealSlides = swiper.slides.length / swiper.loopedSlides; // The actual number of real slides (excluding loop duplicates)
+
+		// Manually calculate the logical previous index
+		let previousSlideIndex;
+		if (currentSlideIndex === 0) {
+			// If the current slide is the first slide, the previous one would be the last
+			previousSlideIndex = totalRealSlides - 1;
+		} else {
+			// Otherwise, it's just the current slide index minus one
+			previousSlideIndex = currentSlideIndex - 1;
+		}
+
+		gsap.to(words[previousSlideIndex], {
+			yPercent: -100,
+			duration: 0.8,
+			ease: "power2.out",
+			onComplete: () => {
+				gsap.set(words[previousSlideIndex], { yPercent: 100 });
+			},
+		});
+		gsap.to(words[currentSlideIndex], { yPercent: 0, duration: 0.8, ease: "power2.out" });
+	});
+}
+
 document.addEventListener("DOMContentLoaded", () => {
 	gsap.registerPlugin(ScrollTrigger);
 	dottedBoothPin();
@@ -969,4 +1076,5 @@ document.addEventListener("DOMContentLoaded", () => {
 	productFeaturesVideo();
 	mobileUsageSwiper();
 	mobileProductCustomizeSwiper();
+	homeHeroSlides();
 });

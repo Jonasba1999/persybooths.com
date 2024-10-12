@@ -172,6 +172,15 @@ input[type="number"] {
 
 /* PRODUCT OTHER PRODUCTS */
 
-.section_product-other .products_collection-item:nth-child(3) {
-	display: none;
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+	.section_product-other .products_collection-item:nth-child(3) {
+		display: none;
+	}
+}
+
+/* ROTATING TEXT */
+
+.product-hero_rotating-text:not(:first-child),
+.product-hero_rotating-text:not(:first-child) {
+	opacity: 0;
 }
