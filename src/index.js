@@ -105,7 +105,7 @@ function boothScrollAnimation() {
 function sideModalAnimation() {
 	// Getting all modal triggers
 	const modalTriggers = document.querySelectorAll("[data-modal-trigger]");
-	if (modalTriggers.length === 0) return;
+	if (!modalTriggers.length) return;
 	let activeTl = null;
 	const modalTimelines = {};
 
@@ -287,7 +287,7 @@ function usageHoverAnimation() {
 	const images = document.querySelectorAll('[data-usage-hover="image"]');
 
 	// Ensure there are both headings and images
-	if (headings.length === 0 || images.length === 0) return;
+	if (!headings.length || !images.length) return;
 
 	// Loop through each heading and add event listeners
 	headings.forEach((heading, index) => {
@@ -365,7 +365,7 @@ function reasonsSlider() {
 
 function reasonsSliderHover() {
 	const slides = document.querySelectorAll('[data-reasons-slider="slide"]');
-	if (!slides) return;
+	if (!slides.length) return;
 
 	const swiperWrapper = document.querySelector('[data-reasons-slider="wrap"]');
 	let descriptionMaxHeight = 0;
@@ -444,7 +444,7 @@ function testimonialsSlider() {
 
 function displayCurrentYear() {
 	const targetTexts = document.querySelectorAll('[data-display-year="text"]');
-	if (targetTexts.length === 0) return;
+	if (!targetTexts.length) return;
 
 	const currentYear = new Date().getFullYear();
 
@@ -455,7 +455,7 @@ function displayCurrentYear() {
 
 function quoteFormQtyInput() {
 	const quoteProducts = document.querySelectorAll('[data-product-quote="product"]');
-	if (quoteProducts.length === 0) return;
+	if (!quoteProducts.length) return;
 
 	quoteProducts.forEach((product) => {
 		const inputField = product.querySelector('[data-product-quote="input"]');
@@ -497,7 +497,7 @@ function quoteFormQtyInput() {
 
 function formSelectFieldColor() {
 	const selectWraps = document.querySelectorAll('[data-form-field="select-wrap"]');
-	if (selectWraps.length === 0) return;
+	if (!selectWraps.length) return;
 
 	selectWraps.forEach((wrap) => {
 		const selectField = wrap.querySelector('[data-form-field="select"]');
@@ -514,7 +514,7 @@ function formSelectFieldColor() {
 
 function productImagesSlider() {
 	const swiperTargets = document.querySelectorAll(".product-hero_swiper");
-	if (swiperTargets.length === 0) return;
+	if (!swiperTargets.length) return;
 
 	swiperTargets.forEach((swiperTarget) => {
 		const swiper = new Swiper(swiperTarget, {
@@ -559,7 +559,7 @@ function productFeaturesSlider() {
 
 function customFormSubmitBtn() {
 	const forms = document.querySelectorAll('[data-form-submit="form"]');
-	if (forms.length === 0) return;
+	if (!forms.length) return;
 
 	forms.forEach((form) => {
 		const defaultBtn = form.querySelector('[data-form-submit="default-btn"]');
@@ -573,11 +573,11 @@ function customFormSubmitBtn() {
 
 function accordionAnimation() {
 	const accordionInstances = document.querySelectorAll('[data-accordion="instance"]');
-	if (accordionInstances.length === 0) return;
+	if (!accordionInstances.length) return;
 
 	accordionInstances.forEach((instance) => {
 		const accordionItems = instance.querySelectorAll('[data-accordion="accordion-item"]');
-		if (accordionItems.length === 0) return;
+		if (!accordionItems.length) return;
 
 		let activeTl = null;
 		let activeAccordion = null;
@@ -707,7 +707,7 @@ function productStickyNav() {
 
 function popupAnimation() {
 	const popupTriggers = document.querySelectorAll("[data-popup-trigger]");
-	if (popupTriggers.length === 0) return;
+	if (!popupTriggers.length) return;
 
 	// Store the timelines with their corresponding popups
 	const popupTimelines = {};
@@ -875,7 +875,7 @@ function mobileMenuAnimation() {
 
 function productFeaturesVideo() {
 	const featureItems = document.querySelectorAll(".product-features_wrap");
-	if (featureItems.length === 0) return;
+	if (!featureItems.length) return;
 
 	featureItems.forEach((item) => {
 		const featureVideo = item.querySelector("video");
@@ -978,12 +978,12 @@ function mobileProductCustomizeSwiper() {
 
 function rotatingText() {
 	const wordWraps = document.querySelectorAll('[data-rotating-text="wrap"]');
-	if (wordWraps.length === 0) return;
+	if (!wordWraps.length) return;
 
 	wordWraps.forEach((wrap) => {
 		const words = gsap.utils.toArray(".product-hero_rotating-text", wrap);
 
-		if (words.length === 0) return;
+		if (!words.length) return;
 
 		const tl = gsap.timeline({
 			repeat: -1,
@@ -1069,13 +1069,110 @@ function homeHeroSlides() {
 
 function testimonialSliderLabels() {
 	const testimonialSlides = document.querySelectorAll('[data-testimonial-slides="slide"]');
-	if (testimonialSlides.length === 0) return;
+	if (!testimonialSlides.length) return;
 
 	testimonialSlides.forEach((slide) => {
 		const label = slide.querySelector(".label");
 		const category = label.textContent.toLowerCase().replace(" ", "-");
-		console.log(category);
 		label.classList.add(`is-${category}`);
+	});
+}
+
+function customFormValidation() {
+	$("form").each(function () {
+		$(this).validate({
+			rules: {
+				Name: {
+					required: true,
+					minlength: 2,
+				},
+				Email: {
+					required: true,
+					email: true,
+				},
+				Message: {
+					required: true,
+					minlength: 5,
+				},
+				PrivacyPolicy: {
+					required: true, // This is the checkbox field
+				},
+				Phone: {
+					required: false, // Optional field
+					digits: true, // Ensure it's only digits if filled
+				},
+			},
+			messages: {
+				Name: {
+					required: "Please enter your name",
+					minlength: "Your name must consist of at least 2 characters",
+				},
+				Email: {
+					required: "Please enter your email",
+					email: "Please enter a valid email address",
+				},
+				Message: {
+					required: "Please enter a message",
+					minlength: "Your message must be at least 5 characters long",
+				},
+				Phone: {
+					digits: "Please enter a valid phone number",
+				},
+			},
+			errorPlacement: function (error, element) {
+				// Skip error message for checkbox and add red border instead
+				if (element.attr("name") === "Privacy-Policy") {
+					// Add error class to the visual checkbox wrapper div
+					element.closest(".form_checkbox-wrap").find(".form_checkbox").addClass("checkbox-error");
+				} else {
+					// For other fields, show the default error message with icon
+					const svgIcon = `
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M8 2C4.68629 2 2 4.68629 2 8C2 11.3137 4.68629 14 8 14C11.3137 14 14 11.3137 14 8C14 4.68629 11.3137 2 8 2Z" stroke="#A5565A" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M8 5.4502L8 8.4502" stroke="#A5565A" stroke-linecap="square" stroke-linejoin="round"/>
+                            <path d="M8 10.45L8 10.5" stroke="#A5565A" stroke-linecap="square" stroke-linejoin="round"/>
+                        </svg>`;
+
+					// Prepend the SVG icon to the error message
+					error.html(svgIcon + " " + error.text());
+					error.insertAfter(element);
+				}
+			},
+			errorElement: "span",
+			// Overriding showErrors to consistently apply the icon whenever error is updated
+			showErrors: function (errorMap, errorList) {
+				// Call the default behavior to show errors
+				this.defaultShowErrors();
+
+				// Iterate through each error in the errorList
+				for (let i = 0; i < errorList.length; i++) {
+					const error = errorList[i].message;
+					const element = $(errorList[i].element);
+
+					// Get the existing error message span and re-add the icon
+					const errorLabel = element.siblings("span.error");
+
+					if (errorLabel.length) {
+						const svgIcon = `
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M8 2C4.68629 2 2 4.68629 2 8C2 11.3137 4.68629 14 8 14C11.3137 14 14 11.3137 14 8C14 4.68629 11.3137 2 8 2Z" stroke="#A5565A" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M8 5.4502L8 8.4502" stroke="#A5565A" stroke-linecap="square" stroke-linejoin="round"/>
+                                <path d="M8 10.45L8 10.5" stroke="#A5565A" stroke-linecap="square" stroke-linejoin="round"/>
+                            </svg>`;
+
+						// Update the error message with the icon every time it's updated
+						errorLabel.html(svgIcon + " " + error);
+					}
+				}
+			},
+			success: function (label, element) {
+				// Remove the red border once the checkbox is valid
+				if ($(element).attr("name") === "Privacy-Policy") {
+					// Remove error class from the visual checkbox wrapper div
+					$(element).closest(".form_checkbox-wrap").find(".form_checkbox").removeClass("checkbox-error");
+				}
+			},
+		});
 	});
 }
 
@@ -1107,4 +1204,5 @@ document.addEventListener("DOMContentLoaded", () => {
 	mobileProductCustomizeSwiper();
 	homeHeroSlides();
 	testimonialSliderLabels();
+	customFormValidation();
 });

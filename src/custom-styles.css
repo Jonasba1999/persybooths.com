@@ -202,3 +202,17 @@ input[type="number"] {
 	background-color: #e8efbd;
 	color: #626c2c;
 }
+
+/* FORM VALIDATION */
+
+form .error {
+	color: #a5565a;
+	display: flex;
+	align-items: center;
+	column-gap: 0.5rem;
+}
+
+form .checkbox-error {
+	border: 1px solid #a5565a !important;
+	background-color: #f0d7d7 !important;
+}
