@@ -188,3 +188,17 @@ input[type="number"] {
 .product-hero_rotating-text:first-child {
 	position: static;
 }
+
+/* TESTIMONIAL SLIDES */
+.label.is-fintech {
+	background-color: #f0d7d7;
+	color: #a5565a;
+}
+.label.is-co-working {
+	background-color: #dee3ed;
+	color: #41597c;
+}
+.label.is-corporate-hq {
+	background-color: #e8efbd;
+	color: #626c2c;
+}

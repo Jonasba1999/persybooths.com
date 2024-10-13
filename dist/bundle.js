@@ -12721,6 +12721,16 @@
       gsapWithCSS.to(words[currentSlideIndex], { yPercent: 0, duration: 0.8, ease: "power2.out" });
     });
   }
+  function testimonialSliderLabels() {
+    const testimonialSlides = document.querySelectorAll('[data-testimonial-slides="slide"]');
+    if (testimonialSlides.length === 0) return;
+    testimonialSlides.forEach((slide2) => {
+      const label = slide2.querySelector(".label");
+      const category = label.textContent.toLowerCase().replace(" ", "-");
+      console.log(category);
+      label.classList.add(`is-${category}`);
+    });
+  }
   document.addEventListener("DOMContentLoaded", () => {
     gsapWithCSS.registerPlugin(ScrollTrigger2);
     dottedBoothPin();
@@ -12748,6 +12758,7 @@
     mobileUsageSwiper();
     mobileProductCustomizeSwiper();
     homeHeroSlides();
+    testimonialSliderLabels();
   });
 })();
 /*! Bundled license information:

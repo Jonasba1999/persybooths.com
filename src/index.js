@@ -1067,6 +1067,18 @@ function homeHeroSlides() {
 	});
 }
 
+function testimonialSliderLabels() {
+	const testimonialSlides = document.querySelectorAll('[data-testimonial-slides="slide"]');
+	if (testimonialSlides.length === 0) return;
+
+	testimonialSlides.forEach((slide) => {
+		const label = slide.querySelector(".label");
+		const category = label.textContent.toLowerCase().replace(" ", "-");
+		console.log(category);
+		label.classList.add(`is-${category}`);
+	});
+}
+
 document.addEventListener("DOMContentLoaded", () => {
 	gsap.registerPlugin(ScrollTrigger);
 	dottedBoothPin();
@@ -1094,4 +1106,5 @@ document.addEventListener("DOMContentLoaded", () => {
 	mobileUsageSwiper();
 	mobileProductCustomizeSwiper();
 	homeHeroSlides();
+	testimonialSliderLabels();
 });
