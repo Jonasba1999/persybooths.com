@@ -367,12 +367,19 @@ function reasonsSliderHover() {
 	const slides = document.querySelectorAll('[data-reasons-slider="slide"]');
 	if (!slides) return;
 
+	const swiperWrapper = document.querySelector('[data-reasons-slider="wrap"]');
+	let descriptionMaxHeight = 0;
+
 	let mm = gsap.matchMedia();
 
 	mm.add("(min-width: 992px)", () => {
 		slides.forEach((slide, index) => {
 			const slideContent = slide.querySelector('[data-reasons-slider="content"]');
 			const slideDescription = slide.querySelector('[data-reasons-slider="description"]');
+			const descriptionHeight = slideDescription.offsetHeight;
+			if (descriptionHeight > descriptionMaxHeight) {
+				descriptionMaxHeight = descriptionHeight;
+			}
 			let hoverTl = gsap.timeline({ paused: true });
 
 			hoverTl
@@ -381,13 +388,10 @@ function reasonsSliderHover() {
 					duration: 0.2,
 					y: "-0.5rem",
 				})
-				.fromTo(
+				.to(
 					slideDescription,
 					{
-						y: "100%",
-					},
-					{
-						y: "0%",
+						y: "-100%",
 						duration: 0.2,
 					},
 					"<"
@@ -399,6 +403,11 @@ function reasonsSliderHover() {
 			slide.addEventListener("mouseout", () => {
 				hoverTl.reverse();
 			});
+		});
+
+		// Adjust slider wrap top-padding to match the heighest description
+		gsap.set(swiperWrapper, {
+			paddingTop: descriptionMaxHeight + "px",
 		});
 	});
 }

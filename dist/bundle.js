@@ -12144,23 +12144,26 @@
   function reasonsSliderHover() {
     const slides = document.querySelectorAll('[data-reasons-slider="slide"]');
     if (!slides) return;
+    const swiperWrapper = document.querySelector('[data-reasons-slider="wrap"]');
+    let descriptionMaxHeight = 0;
     let mm = gsapWithCSS.matchMedia();
     mm.add("(min-width: 992px)", () => {
       slides.forEach((slide2, index) => {
         const slideContent = slide2.querySelector('[data-reasons-slider="content"]');
         const slideDescription = slide2.querySelector('[data-reasons-slider="description"]');
+        const descriptionHeight = slideDescription.offsetHeight;
+        if (descriptionHeight > descriptionMaxHeight) {
+          descriptionMaxHeight = descriptionHeight;
+        }
         let hoverTl = gsapWithCSS.timeline({ paused: true });
         hoverTl.to(slideContent, {
           backgroundColor: "#E8EFBD",
           duration: 0.2,
           y: "-0.5rem"
-        }).fromTo(
+        }).to(
           slideDescription,
           {
-            y: "100%"
-          },
-          {
-            y: "0%",
+            y: "-100%",
             duration: 0.2
           },
           "<"
@@ -12171,6 +12174,9 @@
         slide2.addEventListener("mouseout", () => {
           hoverTl.reverse();
         });
+      });
+      gsapWithCSS.set(swiperWrapper, {
+        paddingTop: descriptionMaxHeight + "px"
       });
     });
   }
