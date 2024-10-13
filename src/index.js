@@ -333,7 +333,11 @@ function reasonsSlider() {
 	const slides = document.querySelectorAll('[data-reasons-slider="slide"]');
 	slides.forEach((slide, index) => {
 		const slideCount = slide.querySelector('[data-reasons-slider="count"]');
-		slideCount.textContent = index + 1;
+		if (index < 10) {
+			slideCount.textContent = "0" + (index + 1);
+		} else {
+			slideCount.textContent = index + 1;
+		}
 	});
 
 	const swiper = new Swiper(swiperTarget, {
