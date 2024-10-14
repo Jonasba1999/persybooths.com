@@ -43,7 +43,7 @@ function boothScrollAnimation() {
 	const rightItems = document.querySelectorAll('[data-features-scroll="right-item"]');
 	const modalBtns = document.querySelectorAll('[data-features-scroll="modal-trigger"]');
 	const boothImg = document.querySelector('[data-features-scroll="booth-img"]');
-	const animationBuffer = 800;
+	const animationBuffer = 400;
 
 	// Calculations for boothPin end
 	const windowHeight = window.innerHeight;
@@ -298,7 +298,7 @@ function usageHoverAnimation() {
 			headings.forEach((sibling) => {
 				if (sibling !== heading) {
 					gsap.to(sibling, {
-						color: "#B4B4B4",
+						opacity: 0.25,
 						duration: 0.2,
 					});
 				}
@@ -313,7 +313,7 @@ function usageHoverAnimation() {
 			// Reset all headings to black when mouse leaves
 			headings.forEach((sibling) => {
 				gsap.to(sibling, {
-					color: "black",
+					opacity: 1,
 					duration: 0.2,
 				});
 			});
@@ -881,17 +881,9 @@ function productFeaturesVideo() {
 		const featureVideo = item.querySelector("video");
 		const featureImage = item.querySelector(".product-features_image");
 		item.addEventListener("mouseenter", () => {
-			gsap.to(featureImage, {
-				opacity: 0,
-				duration: 0.3,
-			});
 			featureVideo.play();
 		});
 		item.addEventListener("mouseleave", () => {
-			gsap.to(featureImage, {
-				opacity: 1,
-				duration: 0.3,
-			});
 			featureVideo.currentTime = 0;
 			featureVideo.pause();
 		});
@@ -1022,6 +1014,7 @@ function homeHeroSlides() {
 			delay: 3000,
 			disableOnInteraction: false,
 		},
+		allowTouchMove: false,
 		speed: 800,
 		loop: true,
 		pagination: {
@@ -1199,10 +1192,10 @@ function customFormValidation() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+	gsap.registerPlugin(ScrollTrigger);
 	$.validator.setDefaults({
 		ignore: [], // Do not ignore any hidden elements
 	});
-	gsap.registerPlugin(ScrollTrigger);
 	dottedBoothPin();
 	boothScrollAnimation();
 	sideModalAnimation();
