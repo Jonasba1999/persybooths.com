@@ -1094,12 +1094,15 @@ function customFormValidation() {
 					required: true,
 					minlength: 5,
 				},
-				PrivacyPolicy: {
+				"Privacy-Policy": {
 					required: true, // This is the checkbox field
 				},
 				Phone: {
 					required: false, // Optional field
 					digits: true, // Ensure it's only digits if filled
+				},
+				"Quote-Delivery": {
+					required: true, // Required custom select dropdown field
 				},
 			},
 			messages: {
@@ -1118,10 +1121,25 @@ function customFormValidation() {
 				Phone: {
 					digits: "Please enter a valid phone number",
 				},
+				"Quote-Delivery": {
+					required: "Please select an option from the list", // Custom message for the select field
+				},
 			},
 			errorPlacement: function (error, element) {
-				// Skip error message for checkbox and add red border instead
-				if (element.attr("name") === "Privacy-Policy") {
+				// Handle custom dropdown select field
+				if (element.attr("name") === "Quote-Delivery") {
+					element.closest(".form_select").append(error);
+					// Append the icon inside the wrapper for visual feedback
+					const svgIcon = `
+                        <svg class="error-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M8 2C4.68629 2 2 4.68629 2 8C2 11.3137 4.68629 14 8 14C11.3137 14 14 11.3137 14 8C14 4.68629 11.3137 2 8 2Z" stroke="#A5565A" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M8 5.4502L8 8.4502" stroke="#A5565A" stroke-linecap="square" stroke-linejoin="round"/>
+                            <path d="M8 10.45L8 10.5" stroke="#A5565A" stroke-linecap="square" stroke-linejoin="round"/>
+                        </svg>`;
+					// Prepend the SVG icon to the error message for the custom dropdown
+					error.html(svgIcon + " " + error.text());
+					element.closest(".form_select").append(error);
+				} else if (element.attr("name") === "Privacy-Policy") {
 					// Add error class to the visual checkbox wrapper div
 					element.closest(".form_checkbox-wrap").find(".form_checkbox").addClass("checkbox-error");
 				} else {
@@ -1139,6 +1157,17 @@ function customFormValidation() {
 				}
 			},
 			errorElement: "span",
+			// Handle the success event (when the field becomes valid)
+			success: function (label, element) {
+				if ($(element).attr("name") === "Quote-Delivery") {
+					// Remove error class and any error message for the custom dropdown
+					$(element).closest(".form_select").find(".form_select-toggle").removeClass("error");
+					$(element).closest(".form_select").find("span.error").remove();
+				} else if ($(element).attr("name") === "PrivacyPolicy") {
+					// Remove error class from the visual checkbox wrapper div
+					$(element).closest(".form_checkbox-wrap").find(".form_checkbox").removeClass("checkbox-error");
+				}
+			},
 			// Overriding showErrors to consistently apply the icon whenever error is updated
 			showErrors: function (errorMap, errorList) {
 				// Call the default behavior to show errors
@@ -1165,18 +1194,14 @@ function customFormValidation() {
 					}
 				}
 			},
-			success: function (label, element) {
-				// Remove the red border once the checkbox is valid
-				if ($(element).attr("name") === "Privacy-Policy") {
-					// Remove error class from the visual checkbox wrapper div
-					$(element).closest(".form_checkbox-wrap").find(".form_checkbox").removeClass("checkbox-error");
-				}
-			},
 		});
 	});
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+	$.validator.setDefaults({
+		ignore: [], // Do not ignore any hidden elements
+	});
 	gsap.registerPlugin(ScrollTrigger);
 	dottedBoothPin();
 	boothScrollAnimation();

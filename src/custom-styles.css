@@ -102,6 +102,10 @@ input[type="number"] {
 	background-color: white;
 }
 
+.product-mobility_accordion_item.is-open .product-mobility_accordion_wrap {
+	color: var(--text-colors--black);
+}
+
 .product-mobility_accordion_item.is-open .product-mobility_accordion_line.is-vertical {
 	display: none;
 }
@@ -205,7 +209,7 @@ input[type="number"] {
 
 /* FORM VALIDATION */
 
-form .error {
+form .error:not(.w-select) {
 	color: #a5565a;
 	display: flex;
 	align-items: center;
