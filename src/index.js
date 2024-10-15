@@ -205,11 +205,11 @@ function indexFeaturesSlider() {
 			fadeEffect: {
 				crossFade: true,
 			},
-			// If we need pagination
 			pagination: {
 				el: ".home-features_swiper-nav",
 				bulletClass: "swiper-bullet",
 				bulletActiveClass: "is-active",
+				clickable: true,
 			},
 		});
 	});
@@ -242,14 +242,20 @@ function customCursorAnimation() {
 	cursorTriggers.forEach((trigger) => {
 		// Set cursor size
 		const cursorSize = trigger.getAttribute("data-cursor-size");
-		const isSlide = trigger.getAttribute("data-slide-cursor");
+		const cursorType = trigger.getAttribute("data-cursor-type");
+		//  cusorTypes: link (default), slide-prev, slide-next
 
 		trigger.addEventListener("mouseover", () => {
-			if (isSlide) {
+			// 1. Setting cursor arrow direction
+			if (cursorType === "slide-prev") {
+				gsap.set(cursorIcon, { rotation: -135 });
+			} else if (cursorType === "slide-next") {
 				gsap.set(cursorIcon, { rotation: 45 });
 			} else {
 				gsap.set(cursorIcon, { rotation: 0 });
 			}
+
+			// 2. Animating cursor to size
 			if (cursorSize === "small") {
 				gsap.set(cursor, {
 					width: "2.5rem",
@@ -289,12 +295,18 @@ function usageHoverAnimation() {
 	// Ensure there are both headings and images
 	if (!headings.length || !images.length) return;
 
-	// Loop through each heading and add event listeners
 	headings.forEach((heading, index) => {
+		// Getting current heading image
 		const image = images[index];
 
 		heading.addEventListener("mouseover", () => {
-			// Grey out all siblings except the hovered one
+			gsap.to(image, { autoAlpha: 1, duration: 0.2 });
+			gsap.to(heading, {
+				opacity: 1,
+				duration: 0.2,
+			});
+
+			// Changing sibling headings
 			headings.forEach((sibling) => {
 				if (sibling !== heading) {
 					gsap.to(sibling, {
@@ -304,9 +316,12 @@ function usageHoverAnimation() {
 				}
 			});
 
-			if (image) {
-				gsap.to(image, { autoAlpha: 1, duration: 0.2 });
-			}
+			// Hiding sibling images
+			images.forEach((sibling) => {
+				if (sibling !== image) {
+					gsap.to(sibling, { autoAlpha: 0, duration: 0.2 });
+				}
+			});
 		});
 
 		heading.addEventListener("mouseout", () => {
@@ -438,6 +453,7 @@ function testimonialsSlider() {
 			el: ".testimonials-slider_pagination",
 			bulletClass: "swiper-bullet",
 			bulletActiveClass: "is-active",
+			clickable: true,
 		},
 	});
 }
@@ -487,11 +503,17 @@ function quoteFormQtyInput() {
 	function qtyDecrease(inputField) {
 		if (inputField.value > 0) {
 			inputField.value = parseInt(inputField.value) - 1;
+			if (inputField.value < 1) {
+				inputField.closest(".quote-modal_product").classList.remove("has-qty");
+			}
 		}
 	}
 
 	function qtyIncrease(inputField) {
 		inputField.value = parseInt(inputField.value) + 1;
+		if (inputField.value > 0) {
+			inputField.closest(".quote-modal_product").classList.add("has-qty");
+		}
 	}
 }
 
@@ -518,7 +540,7 @@ function productImagesSlider() {
 
 	swiperTargets.forEach((swiperTarget) => {
 		const swiper = new Swiper(swiperTarget, {
-			modules: [Pagination],
+			modules: [Pagination, Navigation],
 			slidesPerView: 1,
 			loop: true,
 			spaceBetween: 0,
@@ -526,6 +548,11 @@ function productImagesSlider() {
 				el: ".product-hero_swiper-pagination",
 				bulletClass: "swiper-bullet",
 				bulletActiveClass: "is-active",
+				clickable: true,
+			},
+			navigation: {
+				nextEl: ".product-hero_swiper-btn.is-next",
+				prevEl: ".product-hero_swiper-btn.is-prev",
 			},
 		});
 	});
@@ -1018,9 +1045,10 @@ function homeHeroSlides() {
 		speed: 800,
 		loop: true,
 		pagination: {
-			el: ".home-hero_swiper-pagination ",
+			el: ".home-hero_swiper-pagination",
 			bulletClass: "swiper-bullet",
 			bulletActiveClass: "is-active",
+			clickable: true,
 		},
 	});
 
@@ -1033,30 +1061,35 @@ function homeHeroSlides() {
 		opacity: 1,
 	});
 
-	swiper.on("slideChangeTransitionStart", function (e) {
-		const currentSlideIndex = swiper.realIndex; // The current active slide index (ignores duplicates)
-		const totalSlides = swiper.slides.length; // The total number of slides, including duplicates in loop mode
-		const totalRealSlides = swiper.slides.length / swiper.loopedSlides; // The actual number of real slides (excluding loop duplicates)
+	let previousSlideIndex = 0; // To keep track of the previously active slide
 
-		// Manually calculate the logical previous index
-		let previousSlideIndex;
-		if (currentSlideIndex === 0) {
-			// If the current slide is the first slide, the previous one would be the last
-			previousSlideIndex = totalRealSlides - 1;
-		} else {
-			// Otherwise, it's just the current slide index minus one
-			previousSlideIndex = currentSlideIndex - 1;
-		}
+	swiper.on("slideChangeTransitionStart", function () {
+		const currentSlideIndex = swiper.realIndex;
 
+		// Animate the previous active word out by moving it UP
 		gsap.to(words[previousSlideIndex], {
 			yPercent: -100,
 			duration: 0.8,
 			ease: "power2.out",
 			onComplete: () => {
+				// Reset the previous word to prepare it for the next cycle
 				gsap.set(words[previousSlideIndex], { yPercent: 100 });
 			},
 		});
-		gsap.to(words[currentSlideIndex], { yPercent: 0, duration: 0.8, ease: "power2.out" });
+
+		// Animate the current active word into view by moving it UP from the bottom
+		gsap.fromTo(
+			words[currentSlideIndex],
+			{ yPercent: 100 },
+			{
+				yPercent: 0,
+				duration: 0.8,
+				ease: "power2.out",
+			}
+		);
+
+		// Update previousSlideIndex to the current one
+		previousSlideIndex = currentSlideIndex;
 	});
 }
 
@@ -1097,6 +1130,9 @@ function customFormValidation() {
 				"Quote-Delivery": {
 					required: true, // Required custom select dropdown field
 				},
+				"Company-name": {
+					required: true,
+				},
 			},
 			messages: {
 				Name: {
@@ -1116,6 +1152,9 @@ function customFormValidation() {
 				},
 				"Quote-Delivery": {
 					required: "Please select an option from the list", // Custom message for the select field
+				},
+				"Company-name": {
+					required: "Please enter your company",
 				},
 			},
 			errorPlacement: function (error, element) {
@@ -1223,4 +1262,5 @@ document.addEventListener("DOMContentLoaded", () => {
 	homeHeroSlides();
 	testimonialSliderLabels();
 	customFormValidation();
+	ScrollTrigger.refresh();
 });

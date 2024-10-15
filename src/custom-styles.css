@@ -6,6 +6,7 @@
 	display: inline-block;
 	border-radius: 100%;
 	transition: all 0.2s ease;
+	cursor: pointer;
 }
 /* Adjust to always display swiper correctly on front-end when in designer grid or flex column is used for visibility */
 .swiper-wrapper {
@@ -33,9 +34,7 @@
 	height: 0.375rem;
 	width: 0.375rem;
 }
-[data-cursor-animation="trigger"] {
-	cursor: default;
-}
+
 [data-cursor-animation="trigger"]:hover {
 	cursor: none;
 }
@@ -75,6 +74,10 @@ input[type="number"] {
 	margin: 0px;
 	padding: 0px;
 	text-align: center;
+}
+
+.quote-modal_product.has-qty {
+	border-color: var(--border-colors--medium-grey);
 }
 
 /* Accordions */
@@ -174,6 +177,16 @@ input[type="number"] {
 	border: none;
 }
 
+.mobile-menu_wrap {
+	overflow: auto; /* Enable scrolling */
+	scrollbar-width: none; /* Firefox */
+	-ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+.mobile-menu_wrap::-webkit-scrollbar {
+	display: none;
+}
+
 /* PRODUCT OTHER PRODUCTS */
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
@@ -219,4 +232,10 @@ form .error:not(.w-select) {
 form .checkbox-error {
 	border: 1px solid #a5565a !important;
 	background-color: #f0d7d7 !important;
+}
+
+/* HOME USAGE HOVER */
+
+.home-usage_headings-wrap h3:not(:first-child) {
+	opacity: 0.25;
 }
