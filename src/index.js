@@ -299,7 +299,7 @@ function usageHoverAnimation() {
 		// Getting current heading image
 		const image = images[index];
 
-		heading.addEventListener("mouseover", () => {
+		heading.addEventListener("mouseenter", () => {
 			gsap.to(image, { autoAlpha: 1, duration: 0.2 });
 			gsap.to(heading, {
 				opacity: 1,
@@ -309,6 +309,7 @@ function usageHoverAnimation() {
 			// Changing sibling headings
 			headings.forEach((sibling) => {
 				if (sibling !== heading) {
+					sibling.classList.add("no-hover");
 					gsap.to(sibling, {
 						opacity: 0.25,
 						duration: 0.2,
@@ -324,9 +325,10 @@ function usageHoverAnimation() {
 			});
 		});
 
-		heading.addEventListener("mouseout", () => {
+		heading.addEventListener("mouseleave", () => {
 			// Reset all headings to black when mouse leaves
 			headings.forEach((sibling) => {
+				sibling.classList.remove("no-hover");
 				gsap.to(sibling, {
 					opacity: 1,
 					duration: 0.2,

@@ -239,3 +239,7 @@ form .checkbox-error {
 .home-usage_headings-wrap h3:not(:first-child) {
 	opacity: 0.25;
 }
+
+.home-usage_headings-wrap .no-hover {
+	pointer-events: none;
+}
