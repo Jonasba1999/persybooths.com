@@ -1,5 +1,6 @@
 // Importing custom css
 import "./custom-styles.css";
+import Lenis from "lenis";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 // core version + navigation, pagination modules:
@@ -9,6 +10,32 @@ import { Navigation, Pagination, Autoplay, EffectFade } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/effect-fade";
+// Overlay scrollbar
+import "overlayscrollbars/overlayscrollbars.css";
+import { OverlayScrollbars, ScrollbarsHidingPlugin, SizeObserverPlugin, ClickScrollPlugin } from "overlayscrollbars";
+
+// Global lenis instance
+let lenis;
+
+function smoothScroll() {
+	// Initialize a new Lenis instance for smooth scrolling
+	lenis = new Lenis({
+		duration: 0.5,
+		lerp: 0.1,
+	});
+
+	// Synchronize Lenis scrolling with GSAP's ScrollTrigger plugin
+	lenis.on("scroll", ScrollTrigger.update);
+
+	// Add Lenis's requestAnimationFrame (raf) method to GSAP's ticker
+	// This ensures Lenis's smooth scroll animation updates on each GSAP tick
+	gsap.ticker.add((time) => {
+		lenis.raf(time * 1000); // Convert time from seconds to milliseconds
+	});
+
+	// Disable lag smoothing in GSAP to prevent any delay in scroll animations
+	gsap.ticker.lagSmoothing(0);
+}
 
 function dottedBoothPin() {
 	const dots = document.querySelector('[data-dots-pin="image"]');
@@ -103,34 +130,41 @@ function boothScrollAnimation() {
 }
 
 function sideModalAnimation() {
-	// Getting all modal triggers
-	const modalTriggers = document.querySelectorAll("[data-modal-trigger]");
-	if (!modalTriggers.length) return;
+	// Getting all modals on the page
+	const modals = document.querySelectorAll("[data-modal]");
+	if (!modals.length) return;
+
 	let activeTl = null;
 	const modalTimelines = {};
 
 	function openModal(modalTl, modal) {
 		modalTl.play();
+		toggleScroll();
 		activeTl = modalTl;
 		window.location.hash = modal.getAttribute("data-modal");
 	}
 
 	function closeModal() {
 		activeTl.reverse();
+		toggleScroll();
 		// Remove hash from URL without reloading the page
 		history.pushState("", document.title, window.location.pathname + window.location.search);
 	}
 
-	modalTriggers.forEach((trigger) => {
-		// Getting corresponding modal
-		const modalName = trigger.getAttribute("data-modal-trigger");
-		const modal = document.querySelector(`[data-modal="${modalName}"]`);
+	// Loop through each modal
+	modals.forEach((modal) => {
+		// Getting the modal's name
+		const modalName = modal.getAttribute("data-modal");
 
-		// Getting other corresponding modal's elements
-		const modalWrap = modal.querySelector('[data-modal="modal-wrap"]');
-		const modalOverlay = modal.querySelector('[data-modal="modal-overlay"]');
-		const closeBtns = modal.querySelectorAll('[data-modal="close-btn"]');
+		// Getting all triggers for this modal
+		const triggers = document.querySelectorAll(`[data-modal-trigger="${modalName}"]`);
 
+		// Getting other modal's elements
+		const modalWrap = modal.querySelector('[data-modal-el="wrap"]');
+		const modalOverlay = modal.querySelector('[data-modal-el="overlay"]');
+		const closeBtns = modal.querySelectorAll('[data-modal-el="close-btn"]');
+
+		// Create the timeline for this modal
 		let modalTl = gsap.timeline({ paused: true });
 
 		modalTl
@@ -164,16 +198,21 @@ function sideModalAnimation() {
 		// Store the timeline in an object using modalName as the key
 		modalTimelines[modalName] = { timeline: modalTl, modal: modal };
 
-		trigger.addEventListener("click", () => {
-			openModal(modalTl, modal);
+		// Attach click event to each trigger to open the modal
+		triggers.forEach((trigger) => {
+			trigger.addEventListener("click", () => {
+				openModal(modalTl, modal);
+			});
 		});
 
+		// Attach close event listeners
 		closeBtns.forEach((btn) => {
-			btn.addEventListener("click", () => {
+			btn.addEventListener("click", (event) => {
 				closeModal();
 			});
 		});
 
+		// Close modal via overlay click
 		modalOverlay.addEventListener("click", () => {
 			closeModal();
 		});
@@ -740,14 +779,16 @@ function productStickyNav() {
 }
 
 function popupAnimation() {
-	const popupTriggers = document.querySelectorAll("[data-popup-trigger]");
-	if (!popupTriggers.length) return;
+	// Getting all popups on the page
+	const popups = document.querySelectorAll("[data-popup]");
+	if (!popups.length) return;
 
 	// Store the timelines with their corresponding popups
 	const popupTimelines = {};
 
 	// Utility function to open popup
 	function openPopup(popupTl, popup) {
+		toggleScroll();
 		popupTl.play();
 		// Update the URL hash without reloading the page
 		window.location.hash = popup.getAttribute("data-popup");
@@ -755,20 +796,26 @@ function popupAnimation() {
 
 	// Utility function to close popup
 	function closePopup(popupTl) {
+		toggleScroll();
 		popupTl.reverse();
 		// Remove hash from URL without reloading the page
 		history.pushState("", document.title, window.location.pathname + window.location.search);
 	}
 
-	popupTriggers.forEach((trigger) => {
-		const popupName = trigger.getAttribute("data-popup-trigger");
-		const popup = document.querySelector(`[data-popup=${popupName}]`);
+	// Loop through each popup
+	popups.forEach((popup) => {
+		// Getting the popup's name
+		const popupName = popup.getAttribute("data-popup");
 
-		// Getting other corresponding popup's elements
-		const popupWrap = popup.querySelector('[data-popup="wrap"]');
-		const popupOverlay = popup.querySelector('[data-popup="overlay"]');
-		const closeBtn = popup.querySelector('[data-popup="close-btn"]');
+		// Getting all triggers for this popup
+		const triggers = document.querySelectorAll(`[data-popup-trigger="${popupName}"]`);
 
+		// Getting other popup elements
+		const popupWrap = popup.querySelector('[data-popup-el="wrap"]');
+		const popupOverlay = popup.querySelector('[data-popup-el="overlay"]');
+		const closeBtn = popup.querySelector('[data-popup-el="close-btn"]');
+
+		// Create the timeline for this popup
 		let popupTl = gsap.timeline({ paused: true });
 
 		popupTl
@@ -804,16 +851,21 @@ function popupAnimation() {
 		// Store the timeline in an object using popupName as the key
 		popupTimelines[popupName] = { timeline: popupTl, popup: popup };
 
-		trigger.addEventListener("click", (e) => {
-			e.stopPropagation();
-			e.preventDefault();
-			openPopup(popupTl, popup);
+		// Attach click event to each trigger to open the popup
+		triggers.forEach((trigger) => {
+			trigger.addEventListener("click", (e) => {
+				e.preventDefault();
+				e.stopPropagation();
+				openPopup(popupTl, popup);
+			});
 		});
 
+		// Attach close event listeners
 		closeBtn.addEventListener("click", () => {
 			closePopup(popupTl);
 		});
 
+		// Close popup via overlay click
 		popupOverlay.addEventListener("click", () => {
 			closePopup(popupTl);
 		});
@@ -1237,7 +1289,68 @@ function customFormValidation() {
 	});
 }
 
+function indexMobilityPinAnimation() {
+	const pinSection = document.querySelector('[data-index-mobility-animation="section"]');
+	if (!pinSection) return;
+
+	const nextSection = pinSection.nextElementSibling; // Select next element
+	const videoBlock = pinSection.querySelector('[data-index-mobility-animation="video-block"]');
+
+	let mm = gsap.matchMedia();
+
+	mm.add("(min-width: 992px)", () => {
+		let pinAnimation = gsap.timeline({
+			scrollTrigger: {
+				trigger: pinSection,
+				pin: pinSection,
+				pinSpacing: false,
+				start: "bottom bottom",
+				endTrigger: nextSection,
+				end: "top top",
+				scrub: true,
+			},
+		});
+
+		// Add the animation to the timeline
+		pinAnimation.to(videoBlock, {
+			scale: 0.9,
+			ease: "linear",
+		});
+	});
+}
+
+function toggleScroll() {
+	// Get scrollbar width
+	const scrollbarWidth = window.innerWidth - document.body.clientWidth;
+
+	const additionalPaddingTargets = ["[data-header-sticky]:not([data-header-sticky='false'])", ".section_product-sticky", "[data-modal]"];
+
+	if (!lenis.isStopped) {
+		lenis.stop();
+		osInstance.options({
+			scrollbars: {
+				visibility: "hidden", // Hides the scrollbar
+			},
+		});
+	} else {
+		lenis.start();
+		osInstance.options({
+			scrollbars: {
+				visibility: "auto", // Makes the scrollbar visible when necessary
+			},
+		});
+	}
+}
+
+// Global overlay instance
+let osInstance;
+function overlayScrollbar() {
+	// Simple initialization with an element
+	osInstance = OverlayScrollbars(document.body, {});
+}
+
 document.addEventListener("DOMContentLoaded", () => {
+	smoothScroll();
 	gsap.registerPlugin(ScrollTrigger);
 	$.validator.setDefaults({
 		ignore: [], // Do not ignore any hidden elements
@@ -1269,5 +1382,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	homeHeroSlides();
 	testimonialSliderLabels();
 	customFormValidation();
+	indexMobilityPinAnimation();
+	overlayScrollbar();
 	ScrollTrigger.refresh();
 });
