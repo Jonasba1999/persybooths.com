@@ -670,6 +670,7 @@ function productMobilitySlider() {
 	if (!swiperTarget) return;
 
 	const swiper = new Swiper(swiperTarget, {
+		modules: [Navigation],
 		slidesPerView: "auto",
 		loop: true,
 		spaceBetween: 16,
@@ -677,6 +678,10 @@ function productMobilitySlider() {
 			992: {
 				spaceBetween: 20,
 			},
+		},
+		navigation: {
+			nextEl: ".product-mobility_swiper-btn.is-next",
+			prevEl: ".product-mobility_swiper-btn.is-prev",
 		},
 	});
 }
