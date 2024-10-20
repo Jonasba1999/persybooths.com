@@ -70,17 +70,35 @@ function boothScrollAnimation() {
 	const rightItems = document.querySelectorAll('[data-features-scroll="right-item"]');
 	const modalBtns = document.querySelectorAll('[data-features-scroll="modal-trigger"]');
 	const boothImg = document.querySelector('[data-features-scroll="booth-img"]');
-	const animationBuffer = 400;
+	const animationBuffer = 800;
 
 	// Calculations for boothPin end
 	const windowHeight = window.innerHeight;
 	const imgHeight = boothImg.offsetHeight;
 	const bottomSpace = (windowHeight - imgHeight) / 2;
 
+	// Timeline for booth image scaling
+	let boothScaleTimeline = gsap.timeline({
+		scrollTrigger: {
+			trigger: imageLayer,
+			start: "top top",
+			end: () => {
+				return "+=" + animationBuffer * leftItems.length;
+			},
+			scrub: true,
+		},
+	});
+
+	boothScaleTimeline.to(boothImg, {
+		scale: 0.95, // Target scale, adjust as needed
+		ease: "none",
+	});
+
 	let sectionPin = ScrollTrigger.create({
 		trigger: contentLayer,
 		start: "top top",
 		pin: true,
+		scrub: true,
 		end: () => {
 			return "+=" + animationBuffer * leftItems.length;
 		},
@@ -139,7 +157,7 @@ function sideModalAnimation() {
 
 	function openModal(modalTl, modal) {
 		modalTl.play();
-		toggleScroll();
+		toggleScroll(true);
 		activeTl = modalTl;
 		window.location.hash = modal.getAttribute("data-modal");
 	}
@@ -262,20 +280,40 @@ function customCursorAnimation() {
 
 	// Creating following cursor
 	gsap.set(cursor, { xPercent: -50, yPercent: -50 });
-	let xTo = gsap.quickTo(cursor, "x", { duration: 0.1, ease: "power3" }),
-		yTo = gsap.quickTo(cursor, "y", { duration: 0.1, ease: "power3" });
+	let xTo = gsap.quickTo(cursor, "x", { duration: 0.3, ease: "power3" }),
+		yTo = gsap.quickTo(cursor, "y", { duration: 0.3, ease: "power3" });
 
 	window.addEventListener("pointermove", (e) => {
 		xTo(e.clientX);
 		yTo(e.clientY);
 	});
 
-	let showTl = gsap.timeline({ paused: true });
-	showTl.to(cursor, {
-		scale: 1,
-		duration: 0.4,
-		ease: "power4.inOut",
+	// Animation for clicking
+	let clickTl = gsap.timeline({ paused: true, ease: "power2.inOut" });
+	clickTl
+		.to(cursor, {
+			scale: 0.9,
+			duration: 0.15,
+		})
+		.to(cursor, {
+			scale: 1,
+			duration: 0.15,
+		});
+
+	document.addEventListener("click", () => {
+		clickTl.restart();
 	});
+
+	let showTl = gsap.timeline({ paused: true });
+	showTl
+		.set(cursor, {
+			autoAlpha: 1,
+		})
+		.to(cursor, {
+			scale: 1,
+			duration: 0.4,
+			ease: "power4.inOut",
+		});
 
 	// Show cursor on hover
 	cursorTriggers.forEach((trigger) => {
@@ -532,6 +570,7 @@ function quoteFormQtyInput() {
 		productQuoteBtns.forEach((btn) => {
 			const productName = btn.getAttribute("data-product-quote-btn");
 			const inputField = document.querySelector(`#${productName}`);
+			console.log(`#${productName}`);
 
 			btn.addEventListener("click", () => {
 				if (parseInt(inputField.value) === 0) {
@@ -788,7 +827,7 @@ function popupAnimation() {
 
 	// Utility function to open popup
 	function openPopup(popupTl, popup) {
-		toggleScroll();
+		toggleScroll(true);
 		popupTl.play();
 		// Update the URL hash without reloading the page
 		window.location.hash = popup.getAttribute("data-popup");
@@ -967,11 +1006,27 @@ function productFeaturesVideo() {
 		const featureVideo = item.querySelector("video");
 		const featureImage = item.querySelector(".product-features_image");
 		item.addEventListener("mouseenter", () => {
-			featureVideo.play();
+			if (featureVideo) {
+				featureVideo.play();
+			}
+			if (featureImage && featureVideo) {
+				gsap.to(featureImage, {
+					opacity: 0,
+					duration: 0.3,
+				});
+			}
 		});
 		item.addEventListener("mouseleave", () => {
-			featureVideo.currentTime = 0;
-			featureVideo.pause();
+			if (featureVideo) {
+				featureVideo.currentTime = 0;
+				featureVideo.pause();
+			}
+			if (featureImage && featureVideo) {
+				gsap.to(featureImage, {
+					opacity: 1,
+					duration: 0.3,
+				});
+			}
 		});
 	});
 }
@@ -1319,13 +1374,13 @@ function indexMobilityPinAnimation() {
 	});
 }
 
-function toggleScroll() {
+function toggleScroll(disable = false) {
 	// Get scrollbar width
 	const scrollbarWidth = window.innerWidth - document.body.clientWidth;
 
 	const additionalPaddingTargets = ["[data-header-sticky]:not([data-header-sticky='false'])", ".section_product-sticky", "[data-modal]"];
 
-	if (!lenis.isStopped) {
+	if (disable) {
 		lenis.stop();
 		osInstance.options({
 			scrollbars: {

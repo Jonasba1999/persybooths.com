@@ -266,3 +266,10 @@ html.lenis body {
 .lenis.lenis-smooth iframe {
 	pointer-events: none;
 }
+
+/* PRODUCTS LIST */
+
+.products_item:hover .products_image,
+.header_mega_product-link:hover .header_mega_product-img {
+	transform: scale(1.1);
+}
