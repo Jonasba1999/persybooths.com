@@ -1234,7 +1234,7 @@ function customFormValidation() {
 					required: true,
 					minlength: 5,
 				},
-				"Privacy-Policy": {
+				PrivacyPolicy: {
 					required: true, // This is the checkbox field
 				},
 				Phone: {
@@ -1309,7 +1309,7 @@ function customFormValidation() {
 					// Remove error class and any error message for the custom dropdown
 					$(element).closest(".form_select").find(".form_select-toggle").removeClass("error");
 					$(element).closest(".form_select").find("span.error").remove();
-				} else if ($(element).attr("name") === "PrivacyPolicy") {
+				} else if ($(element).attr("name") === "Privacy-Policy") {
 					// Remove error class from the visual checkbox wrapper div
 					$(element).closest(".form_checkbox-wrap").find(".form_checkbox").removeClass("checkbox-error");
 				}
