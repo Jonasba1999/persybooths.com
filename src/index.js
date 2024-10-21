@@ -20,7 +20,7 @@ let lenis;
 function smoothScroll() {
 	// Initialize a new Lenis instance for smooth scrolling
 	lenis = new Lenis({
-		duration: 0.5,
+		duration: 0.4,
 		lerp: 0.1,
 	});
 
@@ -570,7 +570,6 @@ function quoteFormQtyInput() {
 		productQuoteBtns.forEach((btn) => {
 			const productName = btn.getAttribute("data-product-quote-btn");
 			const inputField = document.querySelector(`#${productName}`);
-			console.log(`#${productName}`);
 
 			btn.addEventListener("click", () => {
 				if (parseInt(inputField.value) === 0) {
@@ -1404,6 +1403,72 @@ function overlayScrollbar() {
 	osInstance = OverlayScrollbars(document.body, {});
 }
 
+function indexHeroScroll() {
+	const heroSection = document.querySelector('[data-index-hero-scroll="section"]');
+	if (!heroSection) return;
+
+	const heroSwiper = document.querySelector('[data-index-hero-scroll="swiper"]');
+
+	let tl = gsap.timeline({
+		scrollTrigger: {
+			trigger: heroSection,
+			start: "top top",
+			end: "bottom top",
+			scrub: 1,
+		},
+	});
+
+	tl.to(heroSection, {
+		borderBottomLeftRadius: "10px",
+		borderBottomRightRadius: "10px",
+		duration: 0.1,
+	}).to(
+		heroSwiper,
+		{
+			y: "10%",
+			ease: "linear",
+		},
+		"<"
+	);
+}
+
+function indexStoryImagesParallax() {
+	const imagesWrap = document.querySelector('[data-index-story-parallax="images-wrap"]');
+	if (!imagesWrap) return;
+
+	const bigImage = imagesWrap.querySelector('[data-index-story-parallax="big-img"]');
+	const smallImages = imagesWrap.querySelectorAll('[data-index-story-parallax="small-img"]');
+
+	let tl = gsap.timeline({
+		scrollTrigger: {
+			trigger: imagesWrap,
+			start: "top bottom",
+			end: "bottom top",
+			scrub: 1,
+		},
+	});
+
+	tl.fromTo(
+		bigImage,
+		{
+			y: "3%",
+		},
+		{
+			y: "-1%",
+		}
+	).fromTo(
+		smallImages,
+		{
+			y: "-5%",
+		},
+		{
+			y: "5%",
+			ease: "linear",
+		},
+		"<"
+	);
+}
+
 document.addEventListener("DOMContentLoaded", () => {
 	smoothScroll();
 	gsap.registerPlugin(ScrollTrigger);
@@ -1439,5 +1504,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	customFormValidation();
 	indexMobilityPinAnimation();
 	overlayScrollbar();
+	indexHeroScroll();
+	indexStoryImagesParallax();
 	ScrollTrigger.refresh();
 });
