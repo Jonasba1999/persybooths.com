@@ -267,9 +267,260 @@ html.lenis body {
 	pointer-events: none;
 }
 
+/* HUBSPOT */
+#hubspot-messages-iframe-container {
+	z-index: 80 !important;
+}
+
 /* PRODUCTS LIST */
 
 .products_item:hover .products_image,
 .header_mega_product-link:hover .header_mega_product-img {
 	transform: scale(1.1);
+}
+
+/* CookieYES */
+.cky-box-bottom-right {
+	bottom: 1.5rem !important;
+	right: 1.5rem !important;
+}
+
+.cky-consent-container {
+	min-width: 28.3125rem !important;
+}
+
+.cky-consent-container .cky-consent-bar {
+	border-radius: 8px !important;
+	padding: 1.25rem !important;
+}
+
+.cky-notice .cky-title {
+	margin-bottom: 0.25rem !important;
+	font-size: 1rem !important;
+	line-height: 1.5rem !important;
+	font-weight: 400 !important;
+}
+
+.cky-notice-des,
+.cky-notice-des * {
+	font-size: 0.875rem !important;
+	line-height: 1.25rem !important;
+}
+
+.cky-notice-btn-wrapper {
+	margin-top: 1.25rem !important;
+	flex-direction: row-reverse !important;
+	justify-content: start !important;
+	column-gap: 1rem !important;
+}
+
+.cky-btn {
+	font-size: 0.875rem !important;
+	margin: 0px !important;
+	line-height: 1.25rem !important;
+	padding: 0.375rem 0.625rem !important;
+	font-weight: 400 !important;
+	border-radius: 0.25rem !important;
+	flex: none !important;
+}
+
+.cky-btn-customize {
+	padding: 0px !important;
+}
+
+.cky-modal {
+	border-radius: 10px 0 0 10px !important;
+}
+
+.cky-preference-center {
+	width: 50vw !important;
+	padding: 2rem !important;
+	overflow: auto !important;
+}
+
+.cky-preference-header {
+	padding: unset !important;
+	display: grid !important;
+	grid-template-columns: repeat(6, 1fr) !important;
+	gap: 1.25rem !important;
+}
+
+.cky-preference-header .cky-preference-title {
+	font-size: 2rem !important;
+	line-height: 2.5rem !important;
+	font-weight: 400 !important;
+	grid-column: 3 / 7 !important;
+}
+
+.cky-preference-header .cky-btn-close {
+	grid-column: 1 / 2 !important;
+	grid-row: 1 !important;
+	display: flex !important;
+	justify-content: flex-start !important;
+	align-items: start !important;
+	height: 100% !important;
+}
+
+.cky-btn-close img {
+	width: 1.5rem !important;
+	height: 1.5rem !important;
+}
+
+.cky-preference-body-wrapper {
+	padding: unset !important;
+	overflow: unset !important;
+}
+
+.cky-preference-content-wrapper {
+	font-size: 1rem !important;
+	line-height: 1.5rem !important;
+	font-weight: 400 !important;
+	display: grid !important;
+	grid-template-columns: repeat(6, 1fr) !important;
+	gap: 1.25rem !important;
+	padding: 0.5rem 0 5.75rem 0 !important;
+}
+.cky-preference-content-wrapper p {
+	grid-column: 3 / 7 !important;
+	font-size: 1rem !important;
+	line-height: 1.5rem !important;
+	font-weight: 400 !important;
+}
+
+.cky-always-active {
+	display: none !important;
+}
+
+.cky-accordion-wrapper {
+	display: flex !important;
+	flex-direction: column !important;
+	margin-bottom: 0 !important;
+}
+
+.cky-accordion .cky-accordion-item {
+	margin-top: unset !important;
+	padding: 1.5rem 0 !important;
+	border-top: 1px solid var(--border-colors--dark-grey) !important;
+}
+.cky-accordion:last-child .cky-accordion-item {
+	border-bottom: 1px solid var(--border-colors--dark-grey) !important;
+}
+
+.cky-accordion-header .cky-accordion-btn {
+	font-weight: 400 !important;
+	font-size: 1.25rem !important;
+	line-height: 1.75rem !important;
+}
+
+.cky-accordion-header-des {
+	font-size: 1rem !important;
+	font-weight: 400 !important;
+	line-height: 1.5rem !important;
+	margin: 0.5rem 0 0 0 !important;
+}
+
+.cky-switch input[type="checkbox"] {
+	border-radius: 0.25rem !important;
+	height: 24px !important;
+	width: 46px !important;
+}
+
+.cky-switch input[type="checkbox"]:before {
+	background-color: var(--background-colors--medium-grey) !important;
+	border-radius: 0.125rem !important;
+	width: 20px !important;
+	height: 20px !important;
+}
+
+.cky-switch input[type="checkbox"]:checked:before {
+	-webkit-transform: translateX(22px) !important;
+	-ms-transform: translateX(22px) !important;
+	transform: translateX(22px) !important;
+	background-color: white !important;
+}
+
+.cky-footer-shadow {
+	display: none !important;
+}
+
+.cky-prefrence-btn-wrapper {
+	padding: 2rem 0 0 0 !important;
+	display: flex !important;
+	flex-direction: row-reverse !important;
+	column-gap: 1rem !important;
+}
+.cky-prefrence-btn-wrapper .cky-btn {
+	width: auto !important;
+	font-size: 1rem !important;
+}
+
+.cky-btn.cky-btn-preferences {
+	padding: 0 !important;
+}
+
+.video-placeholder-normal {
+	display: none !important;
+}
+
+[data-cky-tag="detail-powered-by"] {
+	display: none !important;
+}
+
+@media only screen and (max-width: 767px) {
+	.cky-box-bottom-right {
+		bottom: 0rem !important;
+		right: 0rem !important;
+	}
+	.cky-consent-container {
+		width: 100% !important;
+		min-width: unset !important;
+	}
+	.cky-preference-center {
+		width: 100% !important;
+		padding: 1.25rem !important;
+	}
+	.cky-preference-header .cky-preference-title {
+		font-size: 1.5rem !important;
+		line-height: 2rem !important;
+		align-self: start !important;
+	}
+	.cky-btn-close {
+		align-self: end !important;
+	}
+	.cky-preference-header {
+		display: flex !important;
+		flex-direction: column-reverse !important;
+	}
+	.cky-preference-content-wrapper {
+		display: block !important;
+		padding-bottom: 2rem !important;
+	}
+	.cky-accordion-header .cky-accordion-btn {
+		font-size: 1rem !important;
+		line-height: 1.5rem !important;
+	}
+
+	.cky-accordion .cky-accordion-item {
+		padding: 1.25rem 0 !important;
+	}
+	.cky-prefrence-btn-wrapper {
+		display: flex !important;
+		flex-direction: column !important;
+		row-gap: 1rem !important;
+	}
+}
+
+@media only screen and (max-width: 440px) {
+	.cky-custom-brand-logo-wrapper,
+	.cky-notice .cky-title,
+	.cky-notice-des,
+	.cky-notice-btn-wrapper {
+		padding: unset !important;
+	}
+	.cky-btn {
+		width: unset !important;
+	}
+	.cky-notice-btn-wrapper {
+		flex-direction: row !important;
+	}
 }

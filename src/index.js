@@ -1148,62 +1148,71 @@ function homeHeroSlides() {
 	const swiperTarget = document.querySelector('[data-home-swiper="target"]');
 	if (!swiperTarget) return;
 
-	const swiper = new Swiper(swiperTarget, {
-		modules: [Pagination, Autoplay],
-		autoplay: {
-			delay: 3000,
-			disableOnInteraction: false,
-		},
-		allowTouchMove: false,
-		speed: 800,
-		loop: true,
-		pagination: {
-			el: ".home-hero_swiper-pagination",
-			bulletClass: "swiper-bullet",
-			bulletActiveClass: "is-active",
-			clickable: true,
-		},
-	});
-
-	// Rotating text animation
-	const rotatingTextWrap = document.querySelector('[data-swiper-text="wrap"]');
-	const words = gsap.utils.toArray(".product-hero_rotating-text", rotatingTextWrap);
-
-	gsap.set(words, {
-		yPercent: (i) => (i ? 100 : 0),
-		opacity: 1,
-	});
-
-	let previousSlideIndex = 0; // To keep track of the previously active slide
-
-	swiper.on("slideChangeTransitionStart", function () {
-		const currentSlideIndex = swiper.realIndex;
-
-		// Animate the previous active word out by moving it UP
-		gsap.to(words[previousSlideIndex], {
-			yPercent: -100,
-			duration: 0.8,
-			ease: "power2.out",
-			onComplete: () => {
-				// Reset the previous word to prepare it for the next cycle
-				gsap.set(words[previousSlideIndex], { yPercent: 100 });
+	const slides = swiperTarget.querySelectorAll(".swiper-slide");
+	console.log(slides);
+	if (slides.length > 1) {
+		const swiper = new Swiper(swiperTarget, {
+			modules: [Pagination, Autoplay],
+			autoplay: {
+				delay: 3000,
+				disableOnInteraction: false,
+			},
+			allowTouchMove: true,
+			breakpoints: {
+				992: {
+					allowTouchMove: false,
+				},
+			},
+			speed: 800,
+			loop: true,
+			pagination: {
+				el: ".home-hero_swiper-pagination",
+				bulletClass: "swiper-bullet",
+				bulletActiveClass: "is-active",
+				clickable: true,
 			},
 		});
 
-		// Animate the current active word into view by moving it UP from the bottom
-		gsap.fromTo(
-			words[currentSlideIndex],
-			{ yPercent: 100 },
-			{
-				yPercent: 0,
+		// Rotating text animation
+		const rotatingTextWrap = document.querySelector('[data-swiper-text="wrap"]');
+		const words = gsap.utils.toArray(".product-hero_rotating-text", rotatingTextWrap);
+
+		gsap.set(words, {
+			yPercent: (i) => (i ? 100 : 0),
+			opacity: 1,
+		});
+
+		let previousSlideIndex = 0; // To keep track of the previously active slide
+
+		swiper.on("slideChangeTransitionStart", function () {
+			const currentSlideIndex = swiper.realIndex;
+
+			// Animate the previous active word out by moving it UP
+			gsap.to(words[previousSlideIndex], {
+				yPercent: -100,
 				duration: 0.8,
 				ease: "power2.out",
-			}
-		);
+				onComplete: () => {
+					// Reset the previous word to prepare it for the next cycle
+					gsap.set(words[previousSlideIndex], { yPercent: 100 });
+				},
+			});
 
-		// Update previousSlideIndex to the current one
-		previousSlideIndex = currentSlideIndex;
-	});
+			// Animate the current active word into view by moving it UP from the bottom
+			gsap.fromTo(
+				words[currentSlideIndex],
+				{ yPercent: 100 },
+				{
+					yPercent: 0,
+					duration: 0.8,
+					ease: "power2.out",
+				}
+			);
+
+			// Update previousSlideIndex to the current one
+			previousSlideIndex = currentSlideIndex;
+		});
+	}
 }
 
 function testimonialSliderLabels() {
@@ -1409,27 +1418,33 @@ function indexHeroScroll() {
 
 	const heroSwiper = document.querySelector('[data-index-hero-scroll="swiper"]');
 
-	let tl = gsap.timeline({
-		scrollTrigger: {
-			trigger: heroSection,
-			start: "top top",
-			end: "bottom top",
-			scrub: 1,
-		},
-	});
+	// create
+	let mm = gsap.matchMedia();
 
-	tl.to(heroSection, {
-		borderBottomLeftRadius: "10px",
-		borderBottomRightRadius: "10px",
-		duration: 0.1,
-	}).to(
-		heroSwiper,
-		{
-			y: "10%",
-			ease: "linear",
-		},
-		"<"
-	);
+	// add a media query. When it matches, the associated function will run
+	mm.add("(min-width: 992px)", () => {
+		let tl = gsap.timeline({
+			scrollTrigger: {
+				trigger: heroSection,
+				start: "top top",
+				end: "bottom top",
+				scrub: 1,
+			},
+		});
+
+		tl.to(heroSection, {
+			borderBottomLeftRadius: "10px",
+			borderBottomRightRadius: "10px",
+			duration: 0.1,
+		}).to(
+			heroSwiper,
+			{
+				y: "10%",
+				ease: "linear",
+			},
+			"<"
+		);
+	});
 }
 
 function indexStoryImagesParallax() {
@@ -1469,6 +1484,19 @@ function indexStoryImagesParallax() {
 	);
 }
 
+function cookiesPopup() {
+	setTimeout(() => {
+		const preferenceCenter = document.querySelector(".cky-preference-center");
+		if (!preferenceCenter) return;
+
+		preferenceCenter.setAttribute("data-lenis-prevent", "");
+
+		const closeImg = preferenceCenter.querySelector(".cky-btn-close img");
+		const newCloseImage = "https://cdn.prod.website-files.com/66f058a100becd0dab3c7c70/671794f17dca0eee2831d22a_close.svg";
+		closeImg.src = newCloseImage;
+	}, 1000);
+}
+
 document.addEventListener("DOMContentLoaded", () => {
 	smoothScroll();
 	gsap.registerPlugin(ScrollTrigger);
@@ -1506,6 +1534,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	overlayScrollbar();
 	indexHeroScroll();
 	indexStoryImagesParallax();
+	cookiesPopup();
 	setTimeout(() => {
 		ScrollTrigger.refresh();
 	}, 1500);
