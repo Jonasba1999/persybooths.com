@@ -1504,7 +1504,9 @@ document.addEventListener("DOMContentLoaded", () => {
 		ignore: [], // Do not ignore any hidden elements
 	});
 	dottedBoothPin();
-	boothScrollAnimation();
+	setTimeout(() => {
+		boothScrollAnimation();
+	}, 1000);
 	sideModalAnimation();
 	indexFeaturesSlider();
 	customCursorAnimation();
@@ -1535,7 +1537,5 @@ document.addEventListener("DOMContentLoaded", () => {
 	indexHeroScroll();
 	indexStoryImagesParallax();
 	cookiesPopup();
-	setTimeout(() => {
-		ScrollTrigger.refresh();
-	}, 1500);
+	ScrollTrigger.refresh();
 });
