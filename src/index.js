@@ -1506,5 +1506,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	overlayScrollbar();
 	indexHeroScroll();
 	indexStoryImagesParallax();
-	ScrollTrigger.refresh();
+	setTimeout(() => {
+		ScrollTrigger.refresh();
+	}, 1500);
 });
