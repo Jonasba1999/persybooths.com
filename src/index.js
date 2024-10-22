@@ -1485,16 +1485,14 @@ function indexStoryImagesParallax() {
 }
 
 function cookiesPopup() {
-	setTimeout(() => {
-		const preferenceCenter = document.querySelector(".cky-preference-center");
-		if (!preferenceCenter) return;
+	const preferenceCenter = document.querySelector(".cky-preference-center");
+	if (!preferenceCenter) return;
 
-		preferenceCenter.setAttribute("data-lenis-prevent", "");
+	preferenceCenter.setAttribute("data-lenis-prevent", "");
 
-		const closeImg = preferenceCenter.querySelector(".cky-btn-close img");
-		const newCloseImage = "https://cdn.prod.website-files.com/66f058a100becd0dab3c7c70/671794f17dca0eee2831d22a_close.svg";
-		closeImg.src = newCloseImage;
-	}, 1000);
+	const closeImg = preferenceCenter.querySelector(".cky-btn-close img");
+	const newCloseImage = "https://cdn.prod.website-files.com/66f058a100becd0dab3c7c70/671794f17dca0eee2831d22a_close.svg";
+	closeImg.src = newCloseImage;
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -1504,9 +1502,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		ignore: [], // Do not ignore any hidden elements
 	});
 	dottedBoothPin();
-	setTimeout(() => {
-		boothScrollAnimation();
-	}, 1000);
+	boothScrollAnimation();
 	sideModalAnimation();
 	indexFeaturesSlider();
 	customCursorAnimation();
@@ -1536,6 +1532,8 @@ document.addEventListener("DOMContentLoaded", () => {
 	overlayScrollbar();
 	indexHeroScroll();
 	indexStoryImagesParallax();
-	cookiesPopup();
-	ScrollTrigger.refresh();
+	setTimeout(() => {
+		ScrollTrigger.refresh();
+		cookiesPopup();
+	}, 1000);
 });
