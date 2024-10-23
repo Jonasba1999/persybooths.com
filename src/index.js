@@ -288,20 +288,19 @@ function customCursorAnimation() {
 		yTo(e.clientY);
 	});
 
-	// Animation for clicking
-	let clickTl = gsap.timeline({ paused: true, ease: "power2.inOut" });
-	clickTl
-		.to(cursor, {
+	document.addEventListener("mousedown", () => {
+		gsap.to(cursor, {
+			ease: "power2.inOut",
 			scale: 0.9,
 			duration: 0.15,
-		})
-		.to(cursor, {
+		});
+	});
+	document.addEventListener("mouseup", () => {
+		gsap.to(cursor, {
+			ease: "power2.inOut",
 			scale: 1,
 			duration: 0.15,
 		});
-
-	document.addEventListener("click", () => {
-		clickTl.restart();
 	});
 
 	let showTl = gsap.timeline({ paused: true });
@@ -511,21 +510,22 @@ function testimonialsSlider() {
 	if (!swiperTarget) return;
 
 	const swiper = new Swiper(swiperTarget, {
-		modules: [Autoplay, Pagination],
+		modules: [Autoplay, Pagination, Navigation],
 		loop: true,
 		autoplay: {
 			delay: 4000,
+			disableOnInteraction: false,
+			pauseOnMouseEnter: false,
 		},
 		slidesPerView: 1,
 		centeredSlides: true,
 		spaceBetween: 20,
 		breakpoints: {
 			768: {
-				slidesPerView: 1.5,
+				slidesPerView: 2,
 			},
 			992: {
-				spaceBetween: 32,
-				slidesPerView: 1.5,
+				slidesPerView: 2,
 			},
 		},
 		pagination: {
@@ -533,6 +533,10 @@ function testimonialsSlider() {
 			bulletClass: "swiper-bullet",
 			bulletActiveClass: "is-active",
 			clickable: true,
+		},
+		navigation: {
+			prevEl: ".testimonials-slider_swiper-btn.is-prev",
+			nextEl: ".testimonials-slider_swiper-btn.is-next",
 		},
 	});
 }
@@ -1149,7 +1153,6 @@ function homeHeroSlides() {
 	if (!swiperTarget) return;
 
 	const slides = swiperTarget.querySelectorAll(".swiper-slide");
-	console.log(slides);
 	if (slides.length > 1) {
 		const swiper = new Swiper(swiperTarget, {
 			modules: [Pagination, Autoplay],
@@ -1383,11 +1386,6 @@ function indexMobilityPinAnimation() {
 }
 
 function toggleScroll(disable = false) {
-	// Get scrollbar width
-	const scrollbarWidth = window.innerWidth - document.body.clientWidth;
-
-	const additionalPaddingTargets = ["[data-header-sticky]:not([data-header-sticky='false'])", ".section_product-sticky", "[data-modal]"];
-
 	if (disable) {
 		lenis.stop();
 		osInstance.options({
@@ -1485,19 +1483,40 @@ function indexStoryImagesParallax() {
 }
 
 function cookiesPopup() {
-	const preferenceCenter = document.querySelector(".cky-preference-center");
-	if (!preferenceCenter) return;
+	// Function that modifies the cookieYes popup with JS
+	function applyCustomCode() {
+		const preferenceCenter = document.querySelector(".cky-preference-center");
+		if (!preferenceCenter) return;
 
-	preferenceCenter.setAttribute("data-lenis-prevent", "");
+		preferenceCenter.setAttribute("data-lenis-prevent", "");
 
-	const closeImg = preferenceCenter.querySelector(".cky-btn-close img");
-	const newCloseImage = "https://cdn.prod.website-files.com/66f058a100becd0dab3c7c70/671794f17dca0eee2831d22a_close.svg";
-	closeImg.src = newCloseImage;
+		const closeImg = preferenceCenter.querySelector(".cky-btn-close img");
+		const newCloseImage = "https://cdn.prod.website-files.com/66f058a100becd0dab3c7c70/671794f17dca0eee2831d22a_close.svg";
+		closeImg.src = newCloseImage;
+	}
+
+	// Mutation observer to wait for cookieYes banner to load
+	const observer = new MutationObserver((mutationsList, observer) => {
+		for (const mutation of mutationsList) {
+			if (mutation.type === "childList") {
+				// Check if the cookie banner is now in the DOM
+				if (document.querySelector(".cky-consent-container")) {
+					console.log("CookiesLoaded");
+					applyCustomCode();
+					observer.disconnect(); // Stop observing once the banner is found
+					break;
+				}
+			}
+		}
+	});
+
+	observer.observe(document.body, { childList: true, subtree: true });
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-	smoothScroll();
+	overlayScrollbar();
 	gsap.registerPlugin(ScrollTrigger);
+	smoothScroll();
 	$.validator.setDefaults({
 		ignore: [], // Do not ignore any hidden elements
 	});
@@ -1529,11 +1548,10 @@ document.addEventListener("DOMContentLoaded", () => {
 	testimonialSliderLabels();
 	customFormValidation();
 	indexMobilityPinAnimation();
-	overlayScrollbar();
 	indexHeroScroll();
 	indexStoryImagesParallax();
+	cookiesPopup();
 	setTimeout(() => {
 		ScrollTrigger.refresh();
-		cookiesPopup();
 	}, 1000);
 });
