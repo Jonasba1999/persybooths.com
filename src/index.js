@@ -1469,7 +1469,6 @@ function indexStoryImagesParallax() {
 			end: "bottom top",
 			scrub: 1,
 			ease: "linear",
-			markers: true,
 		},
 	});
 
