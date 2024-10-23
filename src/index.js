@@ -18,9 +18,7 @@ import { OverlayScrollbars, ScrollbarsHidingPlugin, SizeObserverPlugin, ClickScr
 let lenis;
 
 function smoothScroll() {
-	// Initialize a new Lenis instance for smooth scrolling
 	lenis = new Lenis({
-		duration: 0.4,
 		lerp: 0.1,
 	});
 
@@ -436,6 +434,7 @@ function reasonsSlider() {
 	const swiper = new Swiper(swiperTarget, {
 		modules: [Navigation],
 		slidesPerView: 1.3,
+		speed: 600,
 		spaceBetween: 16,
 		breakpoints: {
 			992: {
@@ -512,8 +511,9 @@ function testimonialsSlider() {
 	const swiper = new Swiper(swiperTarget, {
 		modules: [Autoplay, Pagination, Navigation],
 		loop: true,
+		speed: 800,
 		autoplay: {
-			delay: 4000,
+			delay: 6000,
 		},
 		slidesPerView: 1,
 		centeredSlides: true,
@@ -624,6 +624,7 @@ function productImagesSlider() {
 			modules: [Pagination, Navigation],
 			slidesPerView: 1,
 			loop: true,
+			speed: 600,
 			spaceBetween: 0,
 			pagination: {
 				el: ".product-hero_swiper-pagination",
@@ -646,6 +647,7 @@ function productFeaturesSlider() {
 	const swiper = new Swiper(swiperTarget, {
 		modules: [Navigation],
 		slidesPerView: 1.4,
+		speed: 600,
 		spaceBetween: 16,
 		breakpoints: {
 			768: {
@@ -751,7 +753,7 @@ function productMobilitySlider() {
 	const swiper = new Swiper(swiperTarget, {
 		modules: [Navigation],
 		slidesPerView: "auto",
-		loop: true,
+		speed: 800,
 		spaceBetween: 16,
 		breakpoints: {
 			992: {
@@ -1038,6 +1040,7 @@ function mobileUsageSwiper() {
 
 	const swiper = new Swiper(swiperTarget, {
 		slidesPerView: 1.3,
+		speed: 600,
 		spaceBetween: 16,
 		breakpoints: {
 			768: {
@@ -1076,6 +1079,7 @@ function mobileProductCustomizeSwiper() {
 		addSwiperClasses(); // Add classes before initializing Swiper
 		swiper = new Swiper(swiperTarget, {
 			slidesPerView: 1.1,
+			speed: 600,
 			spaceBetween: 16,
 			breakpoints: {
 				768: {
@@ -1155,7 +1159,7 @@ function homeHeroSlides() {
 		const swiper = new Swiper(swiperTarget, {
 			modules: [Pagination, Autoplay],
 			autoplay: {
-				delay: 3000,
+				delay: 4000,
 				disableOnInteraction: false,
 			},
 			allowTouchMove: true,
@@ -1164,7 +1168,7 @@ function homeHeroSlides() {
 					allowTouchMove: false,
 				},
 			},
-			speed: 800,
+			speed: 600,
 			loop: true,
 			pagination: {
 				el: ".home-hero_swiper-pagination",
@@ -1387,15 +1391,23 @@ function toggleScroll(disable = false) {
 	if (disable) {
 		lenis.stop();
 		osInstance.options({
+			overflow: {
+				x: "hidden", // Disable horizontal scrolling
+				y: "hidden", // Disable vertical scrolling
+			},
 			scrollbars: {
-				visibility: "hidden", // Hides the scrollbar
+				visibility: "hidden", // Hide the scrollbars
 			},
 		});
 	} else {
 		lenis.start();
 		osInstance.options({
+			overflow: {
+				x: "scroll", // Re-enable horizontal scrolling (if applicable)
+				y: "scroll", // Re-enable vertical scrolling
+			},
 			scrollbars: {
-				visibility: "auto", // Makes the scrollbar visible when necessary
+				visibility: "auto", // Make the scrollbars visible again
 			},
 		});
 	}
@@ -1456,6 +1468,8 @@ function indexStoryImagesParallax() {
 			start: "top bottom",
 			end: "bottom top",
 			scrub: 1,
+			ease: "linear",
+			markers: true,
 		},
 	});
 
