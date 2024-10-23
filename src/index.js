@@ -16,7 +16,6 @@ import { OverlayScrollbars, ScrollbarsHidingPlugin, SizeObserverPlugin, ClickScr
 
 // Global lenis instance
 let lenis;
-
 function smoothScroll() {
 	lenis = new Lenis({
 		lerp: 0.1,
@@ -67,82 +66,90 @@ function boothScrollAnimation() {
 	const leftItems = document.querySelectorAll('[data-features-scroll="left-item"]');
 	const rightItems = document.querySelectorAll('[data-features-scroll="right-item"]');
 	const modalBtns = document.querySelectorAll('[data-features-scroll="modal-trigger"]');
+	const boothImgWrap = document.querySelector('[data-features-scroll="booth-img-wrap"]');
 	const boothImg = document.querySelector('[data-features-scroll="booth-img"]');
 	const animationBuffer = 800;
 
-	// Calculations for boothPin end
-	const windowHeight = window.innerHeight;
-	const imgHeight = boothImg.offsetHeight;
-	const bottomSpace = (windowHeight - imgHeight) / 2;
+	if (boothImg.complete) {
+		initScrollAnimation();
+	} else {
+		boothImg.addEventListener("load", initScrollAnimation);
+	}
 
-	// Timeline for booth image scaling
-	let boothScaleTimeline = gsap.timeline({
-		scrollTrigger: {
-			trigger: imageLayer,
-			start: "top top",
-			end: () => {
-				return "+=" + animationBuffer * leftItems.length;
-			},
-			scrub: true,
-		},
-	});
+	function initScrollAnimation() {
+		// Calculations for boothPin end
+		const windowHeight = window.innerHeight;
+		const imgHeight = boothImg.offsetHeight;
+		const bottomSpace = (windowHeight - imgHeight) / 2;
 
-	boothScaleTimeline.to(boothImg, {
-		scale: 0.95, // Target scale, adjust as needed
-		ease: "none",
-	});
-
-	let sectionPin = ScrollTrigger.create({
-		trigger: contentLayer,
-		start: "top top",
-		pin: true,
-		scrub: true,
-		end: () => {
-			return "+=" + animationBuffer * leftItems.length;
-		},
-		pinspacing: true,
-	});
-
-	let boothPin = ScrollTrigger.create({
-		trigger: imageLayer,
-		pin: true,
-		start: "top top",
-		end: () => {
-			return "+=" + (animationBuffer * leftItems.length + 700 + bottomSpace);
-		},
-		pinSpacing: false,
-	});
-
-	// Creating scroll animation for each feature item
-	leftItems.forEach((leftItem, index) => {
-		const rightItem = rightItems[index];
-		const modalBtn = modalBtns[index];
-		let tl = gsap.timeline({
+		// Timeline for booth image scaling
+		let boothScaleTimeline = gsap.timeline({
 			scrollTrigger: {
-				toggleActions: "play none none reverse",
-				trigger: ".features-scroll_wrap",
-				start: () => {
-					return index * animationBuffer + "px";
+				trigger: imageLayer,
+				start: "top top",
+				end: () => {
+					return "+=" + animationBuffer * leftItems.length;
 				},
-				end: "+=200px",
-				preventOverlaps: true,
+				scrub: true,
 			},
 		});
 
-		if (index !== 0) {
-			tl.to([leftItems[index - 1], rightItems[index - 1], modalBtns[index - 1]], {
-				opacity: 0,
-			}).fromTo(
-				[leftItem, rightItem, modalBtn],
-				{
-					opacity: 0,
+		boothScaleTimeline.to(boothImgWrap, {
+			scale: 0.9, // Target scale, adjust as needed
+			ease: "none",
+		});
+
+		let contentLayerPin = ScrollTrigger.create({
+			trigger: contentLayer,
+			start: "top top",
+			pin: true,
+			end: () => {
+				return "+=" + animationBuffer * leftItems.length;
+			},
+			pinspacing: true,
+		});
+
+		let imageLayerPin = ScrollTrigger.create({
+			trigger: imageLayer,
+			pin: true,
+			start: "top top",
+			end: () => {
+				return "+=" + (animationBuffer * leftItems.length + 700 + bottomSpace);
+			},
+			pinSpacing: false,
+		});
+
+		// Creating scroll animation for each feature item
+		leftItems.forEach((leftItem, index) => {
+			const rightItem = rightItems[index];
+			const modalBtn = modalBtns[index];
+			let tl = gsap.timeline({
+				scrollTrigger: {
+					toggleActions: "play none none reverse",
+					trigger: ".features-scroll_wrap",
+					start: () => {
+						return index * animationBuffer + "px";
+					},
+					end: "+=200px",
+					preventOverlaps: true,
 				},
-				{
-					opacity: 1,
-				}
-			);
-		}
-	});
+			});
+
+			if (index !== 0) {
+				tl.to([leftItems[index - 1], rightItems[index - 1], modalBtns[index - 1]], {
+					opacity: 0,
+				}).fromTo(
+					[leftItem, rightItem, modalBtn],
+					{
+						opacity: 0,
+					},
+					{
+						opacity: 1,
+					}
+				);
+			}
+		});
+	}
 }
 
 function sideModalAnimation() {
@@ -244,40 +251,15 @@ function sideModalAnimation() {
 	});
 }
 
-function indexFeaturesSlider() {
-	const swiperTargets = document.querySelectorAll(".home-features_swiper");
-	if (!swiperTargets) return;
-
-	swiperTargets.forEach((target) => {
-		const swiper = new Swiper(target, {
-			modules: [Autoplay, Pagination, EffectFade],
-			loop: true,
-			autoplay: {
-				delay: 2000,
-			},
-			slidesPerView: 1,
-			effect: "fade",
-			fadeEffect: {
-				crossFade: true,
-			},
-			pagination: {
-				el: ".home-features_swiper-nav",
-				bulletClass: "swiper-bullet",
-				bulletActiveClass: "is-active",
-				clickable: true,
-			},
-		});
-	});
-}
-
 function customCursorAnimation() {
 	const cursor = document.querySelector(".cursor");
 	if (!cursor) return;
 	const cursorTriggers = document.querySelectorAll('[data-cursor-animation="trigger"]');
 	const cursorIcon = document.querySelector('[data-cursor-animation="icon"]');
 
-	// Creating following cursor
-	gsap.set(cursor, { xPercent: -50, yPercent: -50 });
+	// Set initial state of the cursor
+	gsap.set(cursor, { xPercent: -50, yPercent: -50, autoAlpha: 0 });
+
 	let xTo = gsap.quickTo(cursor, "x", { duration: 0.3, ease: "power3" }),
 		yTo = gsap.quickTo(cursor, "y", { duration: 0.3, ease: "power3" });
 
@@ -286,41 +268,35 @@ function customCursorAnimation() {
 		yTo(e.clientY);
 	});
 
-	document.addEventListener("mousedown", () => {
-		gsap.to(cursor, {
-			ease: "power2.inOut",
-			scale: 0.9,
-			duration: 0.15,
-		});
-	});
-	document.addEventListener("mouseup", () => {
-		gsap.to(cursor, {
-			ease: "power2.inOut",
-			scale: 1,
-			duration: 0.15,
-		});
-	});
-
+	// Cursor reveal timeline
 	let showTl = gsap.timeline({ paused: true });
-	showTl
-		.set(cursor, {
-			autoAlpha: 1,
-		})
-		.to(cursor, {
-			scale: 1,
-			duration: 0.4,
-			ease: "power4.inOut",
-		});
+	showTl.set(cursor, { autoAlpha: 1 }).to(cursor, { scale: 1, duration: 0.4, ease: "power4.inOut" });
+
+	// Cursor click animation (check if cursor is visible)
+	const cursorClick = () => {
+		if (gsap.getProperty(cursor, "autoAlpha") === 1) {
+			gsap.to(cursor, { scale: 0.9, duration: 0.15, ease: "power2.inOut" });
+		}
+	};
+
+	// Cursor release animation
+	const cursorRelease = () => {
+		if (gsap.getProperty(cursor, "autoAlpha") === 1) {
+			gsap.to(cursor, { scale: 1, duration: 0.15, ease: "power2.inOut" });
+		}
+	};
+
+	document.addEventListener("mousedown", cursorClick);
+	document.addEventListener("mouseup", cursorRelease);
 
 	// Show cursor on hover
 	cursorTriggers.forEach((trigger) => {
 		// Set cursor size
 		const cursorSize = trigger.getAttribute("data-cursor-size");
 		const cursorType = trigger.getAttribute("data-cursor-type");
-		//  cusorTypes: link (default), slide-prev, slide-next
 
 		trigger.addEventListener("mouseover", () => {
-			// 1. Setting cursor arrow direction
+			// Set cursor icon rotation
 			if (cursorType === "slide-prev") {
 				gsap.set(cursorIcon, { rotation: -135 });
 			} else if (cursorType === "slide-next") {
@@ -329,33 +305,19 @@ function customCursorAnimation() {
 				gsap.set(cursorIcon, { rotation: 0 });
 			}
 
-			// 2. Animating cursor to size
+			// Set cursor size and reveal
 			if (cursorSize === "small") {
-				gsap.set(cursor, {
-					width: "2.5rem",
-					height: "2.5rem",
-					onComplete: () => {
-						showTl.play();
-					},
-				});
+				gsap.set(cursor, { width: "2.5rem", height: "2.5rem" });
 			} else if (cursorSize === "medium") {
-				gsap.set(cursor, {
-					width: "3.5rem",
-					height: "3.5rem",
-					onComplete: () => {
-						showTl.play();
-					},
-				});
+				gsap.set(cursor, { width: "3.5rem", height: "3.5rem" });
 			} else if (cursorSize === "large") {
-				gsap.set(cursor, {
-					width: "5rem",
-					height: "5rem",
-					onComplete: () => {
-						showTl.play();
-					},
-				});
+				gsap.set(cursor, { width: "5rem", height: "5rem" });
 			}
+
+			// Play the reveal timeline
+			showTl.play();
 		});
+
 		trigger.addEventListener("mouseout", () => {
 			showTl.reverse();
 		});
@@ -403,15 +365,7 @@ function usageHoverAnimation() {
 			// Reset all headings to black when mouse leaves
 			headings.forEach((sibling) => {
 				sibling.classList.remove("no-hover");
-				gsap.to(sibling, {
-					opacity: 1,
-					duration: 0.2,
-				});
 			});
-
-			if (image) {
-				gsap.to(image, { autoAlpha: 0, duration: 0.2 });
-			}
 		});
 	});
 }
@@ -664,20 +618,6 @@ function productFeaturesSlider() {
 			nextEl: ".product-features_btn-next",
 			prevEl: ".product-features_btn-prev",
 		},
-	});
-}
-
-function customFormSubmitBtn() {
-	const forms = document.querySelectorAll('[data-form-submit="form"]');
-	if (!forms.length) return;
-
-	forms.forEach((form) => {
-		const defaultBtn = form.querySelector('[data-form-submit="default-btn"]');
-		const customBtn = form.querySelector('[data-form-submit="custom-btn"]');
-
-		customBtn.addEventListener("click", () => {
-			defaultBtn.click();
-		});
 	});
 }
 
@@ -1369,10 +1309,11 @@ function indexMobilityPinAnimation() {
 	mm.add("(min-width: 992px)", () => {
 		let pinAnimation = gsap.timeline({
 			scrollTrigger: {
-				trigger: pinSection,
+				refreshPriority: -1,
+				trigger: videoBlock,
 				pin: pinSection,
 				pinSpacing: false,
-				start: "bottom bottom",
+				start: "center center",
 				endTrigger: nextSection,
 				end: "top top",
 				scrub: true,
@@ -1380,10 +1321,16 @@ function indexMobilityPinAnimation() {
 		});
 
 		// Add the animation to the timeline
-		pinAnimation.to(videoBlock, {
-			scale: 0.9,
-			ease: "linear",
-		});
+		pinAnimation.fromTo(
+			videoBlock,
+			{
+				scale: 1,
+			},
+			{
+				scale: 0.85,
+				ease: "linear",
+			}
+		);
 	});
 }
 
@@ -1501,6 +1448,19 @@ function cookiesPopup() {
 
 		preferenceCenter.setAttribute("data-lenis-prevent", "");
 
+		const primaryBtns = document.querySelectorAll(".cky-btn-accept");
+		const primaryBtnHTML =
+			'<div class="button_text-wrap"><div class="button_visible-text">Accept all</div><div class="button_hidden-text">Accept all</div></div>';
+		primaryBtns.forEach((btn) => {
+			btn.innerHTML = primaryBtnHTML;
+			btn.classList.add("button");
+		});
+
+		const secondaryBtns = document.querySelectorAll(".cky-btn-customize, .cky-btn-preferences");
+		secondaryBtns.forEach((btn) => {
+			btn.classList.add("button", "is-ghost");
+		});
+
 		const closeImg = preferenceCenter.querySelector(".cky-btn-close img");
 		const newCloseImage = "https://cdn.prod.website-files.com/66f058a100becd0dab3c7c70/671794f17dca0eee2831d22a_close.svg";
 		closeImg.src = newCloseImage;
@@ -1512,7 +1472,6 @@ function cookiesPopup() {
 			if (mutation.type === "childList") {
 				// Check if the cookie banner is now in the DOM
 				if (document.querySelector(".cky-consent-container")) {
-					console.log("CookiesLoaded");
 					applyCustomCode();
 					observer.disconnect(); // Stop observing once the banner is found
 					break;
@@ -1534,7 +1493,6 @@ document.addEventListener("DOMContentLoaded", () => {
 	dottedBoothPin();
 	boothScrollAnimation();
 	sideModalAnimation();
-	indexFeaturesSlider();
 	customCursorAnimation();
 	usageHoverAnimation();
 	reasonsSlider();
@@ -1546,7 +1504,6 @@ document.addEventListener("DOMContentLoaded", () => {
 	productImagesSlider();
 	rotatingText();
 	productFeaturesSlider();
-	customFormSubmitBtn();
 	accordionAnimation();
 	productMobilitySlider();
 	productStickyNav();
