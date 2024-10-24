@@ -152,8 +152,8 @@ function boothScrollAnimation() {
 					);
 			}
 		});
-		ScrollTrigger.refresh();
 	}
+	ScrollTrigger.refresh();
 }
 
 function sideModalAnimation() {
@@ -1328,8 +1328,6 @@ function indexMobilityPinAnimation() {
 			scale: 0.85,
 			ease: "linear",
 		});
-
-		ScrollTrigger.refresh();
 	});
 }
 
@@ -1628,13 +1626,13 @@ document.addEventListener("DOMContentLoaded", () => {
 	mobileProductCustomizeSwiper();
 	testimonialSliderLabels();
 	customFormValidation();
-
+	indexMobilityPinAnimation();
 	indexStoryImagesParallax();
 	cookiesPopup();
 	navBgAnimation();
 	megaMenuAnimation();
 	setTimeout(() => {
+		ScrollTrigger.sort();
 		ScrollTrigger.refresh();
-		indexMobilityPinAnimation();
 	}, 1000);
 });
