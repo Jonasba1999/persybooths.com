@@ -123,7 +123,7 @@ function boothScrollAnimation() {
 		leftItems.forEach((leftItem, index) => {
 			const rightItem = rightItems[index];
 			const modalBtn = modalBtns[index];
-			let tl = gsap.timeline({
+			let featuresChangeTl = gsap.timeline({
 				scrollTrigger: {
 					toggleActions: "play none none reverse",
 					trigger: ".features-scroll_wrap",
@@ -131,24 +131,29 @@ function boothScrollAnimation() {
 						return index * animationBuffer + "px";
 					},
 					end: "+=200px",
+					scrub: false,
 					preventOverlaps: true,
 				},
 			});
 
 			if (index !== 0) {
-				tl.to([leftItems[index - 1], rightItems[index - 1], modalBtns[index - 1]], {
-					opacity: 0,
-				}).fromTo(
-					[leftItem, rightItem, modalBtn],
-					{
+				featuresChangeTl
+					.to([leftItems[index - 1], rightItems[index - 1], modalBtns[index - 1]], {
 						opacity: 0,
-					},
-					{
-						opacity: 1,
-					}
-				);
+					})
+					.fromTo(
+						[leftItem, rightItem, modalBtn],
+						{
+							opacity: 0,
+						},
+						{
+							opacity: 1,
+						}
+					);
 			}
 		});
+
+		ScrollTrigger.refresh();
 	}
 }
 
@@ -1309,28 +1314,23 @@ function indexMobilityPinAnimation() {
 	mm.add("(min-width: 992px)", () => {
 		let pinAnimation = gsap.timeline({
 			scrollTrigger: {
-				refreshPriority: -1,
 				trigger: videoBlock,
-				pin: pinSection,
+				pin: videoBlock,
 				pinSpacing: false,
 				start: "center center",
 				endTrigger: nextSection,
 				end: "top top",
-				scrub: true,
+				scrub: 0.01,
 			},
 		});
 
 		// Add the animation to the timeline
-		pinAnimation.fromTo(
-			videoBlock,
-			{
-				scale: 1,
-			},
-			{
-				scale: 0.85,
-				ease: "linear",
-			}
-		);
+		pinAnimation.to(videoBlock, {
+			scale: 0.85,
+			ease: "linear",
+		});
+
+		ScrollTrigger.refresh();
 	});
 }
 
@@ -1383,7 +1383,7 @@ function indexHeroScroll() {
 				trigger: heroSection,
 				start: "top top",
 				end: "bottom top",
-				scrub: 1,
+				scrub: 0.01,
 			},
 		});
 
@@ -1394,7 +1394,7 @@ function indexHeroScroll() {
 		}).to(
 			heroSwiper,
 			{
-				y: "10%",
+				y: "15%",
 				ease: "linear",
 			},
 			"<"
@@ -1483,6 +1483,122 @@ function cookiesPopup() {
 	observer.observe(document.body, { childList: true, subtree: true });
 }
 
+function navBgAnimation() {
+	const navLinks = document.querySelectorAll('.header_nav [data-nav-bg-animation="link"]');
+	console.log(navLinks.length);
+	if (!navLinks.length) return;
+
+	const navBlob = document.querySelector('[data-nav-bg-animation="blob"]');
+	const navWrap = document.querySelector('[data-nav-bg-animation="nav-wrap"]');
+	const navContainer = navBlob.parentElement;
+	let blobHidden = true;
+	let currentLink;
+
+	function getLinkInfo(link) {
+		const linkCoords = link.getBoundingClientRect();
+		const navCoords = navContainer.getBoundingClientRect();
+
+		// Calculate the left position relative to the parent container
+		const leftPosition = linkCoords.left - navCoords.left;
+
+		const data = {
+			width: linkCoords.width,
+			leftPosition: leftPosition,
+		};
+
+		return data;
+	}
+
+	function moveBlob(target, instant = false) {
+		const { width, leftPosition } = getLinkInfo(target);
+		const duration = !instant ? 0.3 : 0;
+
+		gsap.to(navBlob, {
+			width: width,
+			left: leftPosition,
+			duration: duration,
+			ease: "power2.out",
+		});
+	}
+
+	function showBlob() {
+		blobHidden = false;
+		gsap.to(navBlob, {
+			opacity: 1,
+			duration: 0.2,
+		});
+	}
+	function hideBlob() {
+		blobHidden = true;
+		gsap.to(navBlob, {
+			opacity: 0,
+			duration: 0.3,
+		});
+	}
+
+	navLinks.forEach((link) => {
+		// Toggle blob if page = link
+		if (link.classList.contains("w--current")) {
+			currentLink = link;
+			moveBlob(link, true);
+			showBlob();
+		}
+
+		link.addEventListener("mouseenter", () => {
+			if (blobHidden) {
+				moveBlob(link, true);
+				showBlob();
+			} else {
+				moveBlob(link);
+			}
+		});
+
+		link.addEventListener("mouseleave", () => {
+			if (currentLink && currentLink !== link) {
+				moveBlob(currentLink);
+			} else if (currentLink === link) {
+				return;
+			}
+		});
+	});
+
+	navWrap.addEventListener("mouseleave", () => {
+		if (!currentLink) {
+			hideBlob();
+		}
+	});
+}
+
+function megaMenuAnimation() {
+	const menuTrigger = document.querySelector('[data-mega-menu="trigger"]');
+	if (!menuTrigger) return;
+
+	const menuWrap = document.querySelector('[data-mega-menu="wrap"]');
+	const contentWrap = document.querySelector('[data-mega-menu="content"]');
+
+	const menuHeight = contentWrap.scrollHeight;
+	console.log(menuHeight);
+
+	let menuTl = gsap.timeline({ paused: true });
+
+	menuTl.set(menuWrap, {
+		display: "flex",
+	});
+	menuTl.to(menuWrap, {
+		height: "auto",
+		duration: 0.8,
+		ease: "power3.inOut",
+	});
+
+	menuTrigger.addEventListener("mouseenter", () => {
+		console.log("Menu open");
+		menuTl.play();
+	});
+	menuTrigger.addEventListener("mouseleave", () => {
+		menuTl.reverse();
+	});
+}
+
 document.addEventListener("DOMContentLoaded", () => {
 	overlayScrollbar();
 	gsap.registerPlugin(ScrollTrigger);
@@ -1490,6 +1606,8 @@ document.addEventListener("DOMContentLoaded", () => {
 	$.validator.setDefaults({
 		ignore: [], // Do not ignore any hidden elements
 	});
+	indexHeroScroll();
+	homeHeroSlides();
 	dottedBoothPin();
 	boothScrollAnimation();
 	sideModalAnimation();
@@ -1512,14 +1630,12 @@ document.addEventListener("DOMContentLoaded", () => {
 	productFeaturesVideo();
 	mobileUsageSwiper();
 	mobileProductCustomizeSwiper();
-	homeHeroSlides();
 	testimonialSliderLabels();
 	customFormValidation();
 	indexMobilityPinAnimation();
-	indexHeroScroll();
 	indexStoryImagesParallax();
 	cookiesPopup();
-	setTimeout(() => {
-		ScrollTrigger.refresh();
-	}, 1000);
+	navBgAnimation();
+	megaMenuAnimation();
+	ScrollTrigger.refresh();
 });

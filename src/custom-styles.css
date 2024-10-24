@@ -82,6 +82,10 @@ input[type="number"] {
 
 /* Accordions */
 
+.product-spec_tech_trigger-wrap:hover .product-spec_accordion_btn {
+	background-color: var(--background-colors--lavender);
+}
+
 .product-spec_tech_accordion-item.is-open .product-spec_accordion_line.is-vertical,
 .product-spec_accordion_item.is-open .product-spec_accordion_line.is-vertical {
 	display: none;
@@ -221,6 +225,10 @@ input[type="number"] {
 }
 
 /* FORM VALIDATION */
+.form_checkbox-wrap:hover:not(:has(.form_checkbox-url:hover)) .form_checkbox:not(.w--redirected-checked) {
+	border-style: solid;
+	border-color: var(--border-colors--medium-grey);
+}
 
 form .error:not(.w-select) {
 	color: #a5565a;
