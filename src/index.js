@@ -152,7 +152,6 @@ function boothScrollAnimation() {
 					);
 			}
 		});
-
 		ScrollTrigger.refresh();
 	}
 }
@@ -1320,7 +1319,7 @@ function indexMobilityPinAnimation() {
 				start: "center center",
 				endTrigger: nextSection,
 				end: "top top",
-				scrub: 0.01,
+				scrub: 0.1,
 			},
 		});
 
@@ -1485,7 +1484,6 @@ function cookiesPopup() {
 
 function navBgAnimation() {
 	const navLinks = document.querySelectorAll('.header_nav [data-nav-bg-animation="link"]');
-	console.log(navLinks.length);
 	if (!navLinks.length) return;
 
 	const navBlob = document.querySelector('[data-nav-bg-animation="blob"]');
@@ -1577,7 +1575,6 @@ function megaMenuAnimation() {
 	const contentWrap = document.querySelector('[data-mega-menu="content"]');
 
 	const menuHeight = contentWrap.scrollHeight;
-	console.log(menuHeight);
 
 	let menuTl = gsap.timeline({ paused: true });
 
@@ -1591,7 +1588,6 @@ function megaMenuAnimation() {
 	});
 
 	menuTrigger.addEventListener("mouseenter", () => {
-		console.log("Menu open");
 		menuTl.play();
 	});
 	menuTrigger.addEventListener("mouseleave", () => {
@@ -1632,10 +1628,13 @@ document.addEventListener("DOMContentLoaded", () => {
 	mobileProductCustomizeSwiper();
 	testimonialSliderLabels();
 	customFormValidation();
-	indexMobilityPinAnimation();
+
 	indexStoryImagesParallax();
 	cookiesPopup();
 	navBgAnimation();
 	megaMenuAnimation();
-	ScrollTrigger.refresh();
+	setTimeout(() => {
+		ScrollTrigger.refresh();
+		indexMobilityPinAnimation();
+	}, 1000);
 });
