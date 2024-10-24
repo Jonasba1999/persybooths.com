@@ -1313,6 +1313,7 @@ function indexMobilityPinAnimation() {
 	mm.add("(min-width: 992px)", () => {
 		let pinAnimation = gsap.timeline({
 			scrollTrigger: {
+				refreshPriority: -1,
 				trigger: videoBlock,
 				pin: videoBlock,
 				pinSpacing: false,
@@ -1328,6 +1329,8 @@ function indexMobilityPinAnimation() {
 			scale: 0.85,
 			ease: "linear",
 		});
+
+		ScrollTrigger.refresh();
 	});
 }
 
@@ -1634,5 +1637,5 @@ document.addEventListener("DOMContentLoaded", () => {
 	setTimeout(() => {
 		ScrollTrigger.sort();
 		ScrollTrigger.refresh();
-	}, 1000);
+	}, 2000);
 });
