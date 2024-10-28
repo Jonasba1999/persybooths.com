@@ -1493,6 +1493,14 @@ function navBgAnimation() {
 	let blobHidden = true;
 	let currentLink;
 
+	// Variable to check if subpage is current url
+	const currentUrl = window.location.href;
+
+	// Logic for product inner pages
+	function isActiveNav(link) {
+		return link.classList.contains("w--current") || currentUrl.includes(link.href);
+	}
+
 	function getLinkInfo(link) {
 		const linkCoords = link.getBoundingClientRect();
 		const navCoords = navContainer.getBoundingClientRect();
@@ -1537,7 +1545,7 @@ function navBgAnimation() {
 
 	navLinks.forEach((link) => {
 		// Toggle blob if page = link
-		if (link.classList.contains("w--current")) {
+		if (isActiveNav(link)) {
 			currentLink = link;
 			moveBlob(link, true);
 			showBlob();
@@ -1637,5 +1645,5 @@ document.addEventListener("DOMContentLoaded", () => {
 	setTimeout(() => {
 		ScrollTrigger.sort();
 		ScrollTrigger.refresh();
-	}, 2000);
+	}, 1000);
 });
