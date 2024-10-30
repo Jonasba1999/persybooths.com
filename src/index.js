@@ -1604,6 +1604,42 @@ function megaMenuAnimation() {
 	});
 }
 
+function formUTMparameters() {
+	// Step 1: Check for UTM parameters in the URL and store them in localStorage
+	function storeURLparameters() {
+		const params = new URLSearchParams(window.location.search);
+		const utmParameters = ["utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content"];
+
+		utmParameters.forEach((param) => {
+			if (params.has(param) && !localStorage.getItem(param)) {
+				localStorage.setItem(param, params.get(param));
+			}
+		});
+	}
+
+	storeURLparameters();
+
+	// Step 2: Populate form fields from localStorage
+	function populateFormsFields() {
+		const forms = document.querySelectorAll("form");
+		if (!forms.length) return;
+
+		forms.forEach((form) => {
+			const utmFields = form.querySelectorAll('input[name^="utm_"]');
+
+			utmFields.forEach((field) => {
+				const fieldName = field.name;
+				const localStorageValue = localStorage.getItem(fieldName);
+				if (localStorageValue) {
+					field.value = localStorageValue;
+				}
+			});
+		});
+	}
+
+	populateFormsFields();
+}
+
 document.addEventListener("DOMContentLoaded", () => {
 	overlayScrollbar();
 	gsap.registerPlugin(ScrollTrigger);
@@ -1642,6 +1678,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	cookiesPopup();
 	navBgAnimation();
 	megaMenuAnimation();
+	formUTMparameters();
 	setTimeout(() => {
 		ScrollTrigger.sort();
 		ScrollTrigger.refresh();
