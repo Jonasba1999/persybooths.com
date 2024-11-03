@@ -1164,17 +1164,6 @@ function homeHeroSlides() {
 	}
 }
 
-function testimonialSliderLabels() {
-	const testimonialSlides = document.querySelectorAll('[data-testimonial-slides="slide"]');
-	if (!testimonialSlides.length) return;
-
-	testimonialSlides.forEach((slide) => {
-		const label = slide.querySelector(".label");
-		const category = label.textContent.toLowerCase().replace(" ", "-");
-		label.classList.add(`is-${category}`);
-	});
-}
-
 function customFormValidation() {
 	$("form").each(function () {
 		$(this).validate({
@@ -1234,11 +1223,11 @@ function customFormValidation() {
 					element.closest(".form_select").append(error);
 					// Append the icon inside the wrapper for visual feedback
 					const svgIcon = `
-                        <svg class="error-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M8 2C4.68629 2 2 4.68629 2 8C2 11.3137 4.68629 14 8 14C11.3137 14 14 11.3137 14 8C14 4.68629 11.3137 2 8 2Z" stroke="#A5565A" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M8 5.4502L8 8.4502" stroke="#A5565A" stroke-linecap="square" stroke-linejoin="round"/>
-                            <path d="M8 10.45L8 10.5" stroke="#A5565A" stroke-linecap="square" stroke-linejoin="round"/>
-                        </svg>`;
+			            <svg class="error-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+			                <path d="M8 2C4.68629 2 2 4.68629 2 8C2 11.3137 4.68629 14 8 14C11.3137 14 14 11.3137 14 8C14 4.68629 11.3137 2 8 2Z" stroke="#A5565A" stroke-linecap="round" stroke-linejoin="round"/>
+			                <path d="M8 5.4502L8 8.4502" stroke="#A5565A" stroke-linecap="square" stroke-linejoin="round"/>
+			                <path d="M8 10.45L8 10.5" stroke="#A5565A" stroke-linecap="square" stroke-linejoin="round"/>
+			            </svg>`;
 					// Prepend the SVG icon to the error message for the custom dropdown
 					error.html(svgIcon + " " + error.text());
 					element.closest(".form_select").append(error);
@@ -1248,11 +1237,11 @@ function customFormValidation() {
 				} else {
 					// For other fields, show the default error message with icon
 					const svgIcon = `
-                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M8 2C4.68629 2 2 4.68629 2 8C2 11.3137 4.68629 14 8 14C11.3137 14 14 11.3137 14 8C14 4.68629 11.3137 2 8 2Z" stroke="#A5565A" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M8 5.4502L8 8.4502" stroke="#A5565A" stroke-linecap="square" stroke-linejoin="round"/>
-                            <path d="M8 10.45L8 10.5" stroke="#A5565A" stroke-linecap="square" stroke-linejoin="round"/>
-                        </svg>`;
+			            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+			                <path d="M8 2C4.68629 2 2 4.68629 2 8C2 11.3137 4.68629 14 8 14C11.3137 14 14 11.3137 14 8C14 4.68629 11.3137 2 8 2Z" stroke="#A5565A" stroke-linecap="round" stroke-linejoin="round"/>
+			                <path d="M8 5.4502L8 8.4502" stroke="#A5565A" stroke-linecap="square" stroke-linejoin="round"/>
+			                <path d="M8 10.45L8 10.5" stroke="#A5565A" stroke-linecap="square" stroke-linejoin="round"/>
+			            </svg>`;
 
 					// Prepend the SVG icon to the error message
 					error.html(svgIcon + " " + error.text());
@@ -1269,6 +1258,9 @@ function customFormValidation() {
 				} else if ($(element).attr("name") === "Privacy-Policy") {
 					// Remove error class from the visual checkbox wrapper div
 					$(element).closest(".form_checkbox-wrap").find(".form_checkbox").removeClass("checkbox-error");
+				} else {
+					// For all other fields, remove the error <span> element to prevent layout shifts
+					$(label).remove();
 				}
 			},
 			// Overriding showErrors to consistently apply the icon whenever error is updated
@@ -1640,6 +1632,29 @@ function formUTMparameters() {
 	populateFormsFields();
 }
 
+function footerParallax() {
+	const footer = document.querySelector(".footer");
+	if (!footer) return;
+
+	let tl = gsap.timeline({
+		scrollTrigger: {
+			trigger: footer,
+			start: "top bottom",
+			end: "bottom bottom",
+			scrub: 0.01,
+		},
+	});
+
+	tl.from(
+		".footer_wrap",
+		{
+			y: "15%",
+			ease: "linear",
+		},
+		"<"
+	);
+}
+
 document.addEventListener("DOMContentLoaded", () => {
 	overlayScrollbar();
 	gsap.registerPlugin(ScrollTrigger);
@@ -1671,7 +1686,6 @@ document.addEventListener("DOMContentLoaded", () => {
 	productFeaturesVideo();
 	mobileUsageSwiper();
 	mobileProductCustomizeSwiper();
-	testimonialSliderLabels();
 	customFormValidation();
 	indexMobilityPinAnimation();
 	indexStoryImagesParallax();
@@ -1679,6 +1693,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	navBgAnimation();
 	megaMenuAnimation();
 	formUTMparameters();
+	footerParallax();
 	setTimeout(() => {
 		ScrollTrigger.sort();
 		ScrollTrigger.refresh();

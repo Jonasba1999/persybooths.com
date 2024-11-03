@@ -210,20 +210,6 @@ input[type="number"] {
 	position: static;
 }
 
-/* TESTIMONIAL SLIDES */
-.label.is-fintech {
-	background-color: #f0d7d7;
-	color: #a5565a;
-}
-.label.is-co-working {
-	background-color: #dee3ed;
-	color: #41597c;
-}
-.label.is-corporate-hq {
-	background-color: #e8efbd;
-	color: #626c2c;
-}
-
 /* FORM VALIDATION */
 .form_checkbox-wrap:hover:not(:has(.form_checkbox-url:hover)) .form_checkbox:not(.w--redirected-checked) {
 	border-style: solid;
