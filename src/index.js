@@ -556,23 +556,6 @@ function quoteFormQtyInput() {
 	}
 }
 
-function formSelectFieldColor() {
-	const selectWraps = document.querySelectorAll('[data-form-field="select-wrap"]');
-	if (!selectWraps.length) return;
-
-	selectWraps.forEach((wrap) => {
-		const selectField = wrap.querySelector('[data-form-field="select"]');
-		const selectToggle = document.querySelector('[data-form-field="select-toggle"]');
-		selectField.addEventListener("change", () => {
-			if (selectField.value) {
-				selectToggle.style.color = "black";
-			} else {
-				selectToggle.style.color = "#8B8D8F";
-			}
-		});
-	});
-}
-
 function productImagesSlider() {
 	const swiperTargets = document.querySelectorAll(".product-hero_swiper");
 	if (!swiperTargets.length) return;
@@ -1165,7 +1148,30 @@ function homeHeroSlides() {
 }
 
 function customFormValidation() {
+	const svgIcon = `
+    <svg class="error-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M8 2C4.68629 2 2 4.68629 2 8C2 11.3137 4.68629 14 8 14C11.3137 14 14 11.3137 14 8C14 4.68629 11.3137 2 8 2Z" stroke="#A5565A" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M8 5.4502L8 8.4502" stroke="#A5565A" stroke-linecap="square" stroke-linejoin="round"/>
+        <path d="M8 10.45L8 10.5" stroke="#A5565A" stroke-linecap="square" stroke-linejoin="round"/>
+    </svg>`;
+
+	$.validator.addMethod(
+		"inArray",
+		function (value, element, array) {
+			return array.includes(value); // Check if the value exists in the array
+		},
+		svgIcon + "Please select a valid option."
+	); // Custom error message
+
 	$("form").each(function () {
+		const validCountries = [];
+		const deliveryOptions = this.querySelectorAll('[data-custom-select="link"]');
+		if (deliveryOptions.length) {
+			deliveryOptions.forEach((option) => {
+				validCountries.push(option.textContent);
+			});
+		}
+
 		$(this).validate({
 			rules: {
 				Name: {
@@ -1189,6 +1195,7 @@ function customFormValidation() {
 				},
 				"Quote-Delivery": {
 					required: true, // Required custom select dropdown field
+					inArray: validCountries,
 				},
 				"Company-name": {
 					required: true,
@@ -1218,76 +1225,49 @@ function customFormValidation() {
 				},
 			},
 			errorPlacement: function (error, element) {
-				// Handle custom dropdown select field
+				// Handle custom dropdown select field with `inArray` validation
 				if (element.attr("name") === "Quote-Delivery") {
-					element.closest(".form_select").append(error);
-					// Append the icon inside the wrapper for visual feedback
-					const svgIcon = `
-			            <svg class="error-icon" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-			                <path d="M8 2C4.68629 2 2 4.68629 2 8C2 11.3137 4.68629 14 8 14C11.3137 14 14 11.3137 14 8C14 4.68629 11.3137 2 8 2Z" stroke="#A5565A" stroke-linecap="round" stroke-linejoin="round"/>
-			                <path d="M8 5.4502L8 8.4502" stroke="#A5565A" stroke-linecap="square" stroke-linejoin="round"/>
-			                <path d="M8 10.45L8 10.5" stroke="#A5565A" stroke-linecap="square" stroke-linejoin="round"/>
-			            </svg>`;
-					// Prepend the SVG icon to the error message for the custom dropdown
-					error.html(svgIcon + " " + error.text());
-					element.closest(".form_select").append(error);
+					element.closest(".form_select").append(error); // Place the error in the dropdown wrapper
 				} else if (element.attr("name") === "Privacy-Policy") {
 					// Add error class to the visual checkbox wrapper div
 					element.closest(".form_checkbox-wrap").find(".form_checkbox").addClass("checkbox-error");
 				} else {
-					// For other fields, show the default error message with icon
-					const svgIcon = `
-			            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-			                <path d="M8 2C4.68629 2 2 4.68629 2 8C2 11.3137 4.68629 14 8 14C11.3137 14 14 11.3137 14 8C14 4.68629 11.3137 2 8 2Z" stroke="#A5565A" stroke-linecap="round" stroke-linejoin="round"/>
-			                <path d="M8 5.4502L8 8.4502" stroke="#A5565A" stroke-linecap="square" stroke-linejoin="round"/>
-			                <path d="M8 10.45L8 10.5" stroke="#A5565A" stroke-linecap="square" stroke-linejoin="round"/>
-			            </svg>`;
-
-					// Prepend the SVG icon to the error message
-					error.html(svgIcon + " " + error.text());
+					// For other fields, insert the error message after the element
 					error.insertAfter(element);
 				}
 			},
 			errorElement: "span",
+
 			// Handle the success event (when the field becomes valid)
 			success: function (label, element) {
 				if ($(element).attr("name") === "Quote-Delivery") {
-					// Remove error class and any error message for the custom dropdown
 					$(element).closest(".form_select").find(".form_select-toggle").removeClass("error");
 					$(element).closest(".form_select").find("span.error").remove();
 				} else if ($(element).attr("name") === "Privacy-Policy") {
-					// Remove error class from the visual checkbox wrapper div
 					$(element).closest(".form_checkbox-wrap").find(".form_checkbox").removeClass("checkbox-error");
 				} else {
-					// For all other fields, remove the error <span> element to prevent layout shifts
-					$(label).remove();
+					$(label).remove(); // Remove error <span> to prevent layout shifts
 				}
 			},
+
 			// Overriding showErrors to consistently apply the icon whenever error is updated
 			showErrors: function (errorMap, errorList) {
 				// Call the default behavior to show errors
 				this.defaultShowErrors();
 
-				// Iterate through each error in the errorList
-				for (let i = 0; i < errorList.length; i++) {
-					const error = errorList[i].message;
-					const element = $(errorList[i].element);
+				// Iterate through each error in the errorList and prepend the icon to each error message
+				errorList.forEach((errorItem) => {
+					const element = $(errorItem.element); // The input field with the error
 
-					// Get the existing error message span and re-add the icon
-					const errorLabel = element.siblings("span.error");
+					// Locate the error message using the aria-describedby attribute
+					const describedById = element.attr("aria-describedby");
+					const errorLabel = $("#" + describedById); // Select by ID
 
-					if (errorLabel.length) {
-						const svgIcon = `
-                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M8 2C4.68629 2 2 4.68629 2 8C2 11.3137 4.68629 14 8 14C11.3137 14 14 11.3137 14 8C14 4.68629 11.3137 2 8 2Z" stroke="#A5565A" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M8 5.4502L8 8.4502" stroke="#A5565A" stroke-linecap="square" stroke-linejoin="round"/>
-                                <path d="M8 10.45L8 10.5" stroke="#A5565A" stroke-linecap="square" stroke-linejoin="round"/>
-                            </svg>`;
-
-						// Update the error message with the icon every time it's updated
-						errorLabel.html(svgIcon + " " + error);
+					// Only add the icon if it hasn't been added already, to avoid duplicates
+					if (errorLabel.length && !errorLabel.html().includes("error-icon")) {
+						errorLabel.html(svgIcon + " " + errorItem.message); // Add icon + error message
 					}
-				}
+				});
 			},
 		});
 	});
@@ -1675,6 +1655,51 @@ function footerParallax() {
 	);
 }
 
+function customFormSelect() {
+	const selectWraps = document.querySelectorAll('[data-custom-select="select-wrap"]');
+	if (!selectWraps.length) return;
+
+	selectWraps.forEach((wrap) => {
+		const selectField = wrap.querySelector('[data-custom-select="select-field"]');
+		const inputField = wrap.querySelector('[data-custom-select="text-input"]');
+		const optionLinks = wrap.querySelectorAll('[data-custom-select="link"]');
+		const dropdownWrap = wrap.querySelector('[data-custom-select="dropdown-wrap"]');
+
+		optionLinks.forEach((link) => {
+			link.addEventListener("click", linkClick);
+		});
+
+		function linkClick() {
+			$(".w-dropdown").trigger("w-close");
+			inputField.value = this.textContent;
+			$(inputField).valid();
+		}
+
+		function filterOptions(e) {
+			// 1. Get current input value
+			const filterValue = e.target.value.toLowerCase();
+
+			// 2. Loop through all links inside dropdownWrap
+			const dropdownLinks = wrap.querySelectorAll("a");
+			dropdownLinks.forEach((link) => {
+				if (link.textContent.toLowerCase().startsWith(filterValue)) {
+					link.style.display = "block";
+				} else {
+					link.style.display = "none";
+				}
+			});
+		}
+
+		function clearInput(e) {
+			e.target.value = "";
+			filterOptions(e);
+		}
+
+		inputField.addEventListener("keyup", filterOptions);
+		inputField.addEventListener("focus", clearInput);
+	});
+}
+
 document.addEventListener("DOMContentLoaded", () => {
 	overlayScrollbar();
 	gsap.registerPlugin(ScrollTrigger);
@@ -1694,7 +1719,6 @@ document.addEventListener("DOMContentLoaded", () => {
 	testimonialsSlider();
 	displayCurrentYear();
 	quoteFormQtyInput();
-	formSelectFieldColor();
 	productImagesSlider();
 	rotatingText();
 	productFeaturesSlider();
@@ -1715,6 +1739,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	formUTMparameters();
 	formPageField();
 	footerParallax();
+	customFormSelect();
 	setTimeout(() => {
 		ScrollTrigger.sort();
 		ScrollTrigger.refresh();
