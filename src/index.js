@@ -1632,9 +1632,28 @@ function formUTMparameters() {
 	populateFormsFields();
 }
 
+function formPageField() {
+	const forms = document.querySelectorAll("form");
+	if (!forms.length) return;
+	const pageURL = window.location.href;
+
+	forms.forEach((form) => {
+		const urlField = form.querySelector('input[name="Page-URL"]');
+		if (!urlField) return;
+		urlField.value = pageURL;
+	});
+}
+
 function footerParallax() {
-	const footer = document.querySelector(".footer");
+	const footer = document.querySelector("footer");
 	if (!footer) return;
+
+	const sections = document.querySelectorAll("section");
+	const lastSection = sections[sections.length - 1];
+
+	const footerWrap = document.querySelector(".footer_fixed-wrap");
+	const footerHeight = footerWrap.scrollHeight;
+	footer.style.height = footerHeight + "px";
 
 	let tl = gsap.timeline({
 		scrollTrigger: {
@@ -1646,11 +1665,12 @@ function footerParallax() {
 	});
 
 	tl.from(
-		".footer_wrap",
+		footerWrap,
 		{
-			y: "15%",
+			y: "40%",
 			ease: "linear",
 		},
+
 		"<"
 	);
 }
@@ -1693,6 +1713,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	navBgAnimation();
 	megaMenuAnimation();
 	formUTMparameters();
+	formPageField();
 	footerParallax();
 	setTimeout(() => {
 		ScrollTrigger.sort();
