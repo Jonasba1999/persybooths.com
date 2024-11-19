@@ -34,6 +34,29 @@ function smoothScroll() {
 	gsap.ticker.lagSmoothing(0);
 }
 
+function nestedLenisScroll() {
+	const nestedTargets = document.querySelectorAll('[data-nested-lenis="wrapper"]');
+	if (!nestedTargets.length) return;
+
+	nestedTargets.forEach((wrapper) => {
+		const content = wrapper.querySelector('[data-nested-lenis="content"]');
+
+		const nestedLenis = new Lenis({
+			wrapper: wrapper,
+			content: content,
+			lerp: 0.1,
+			overscroll: false,
+		});
+
+		// GSAP ticker for smooth scrolling
+		gsap.ticker.add((time) => {
+			if (nestedLenis) {
+				nestedLenis.raf(time * 1000);
+			}
+		});
+	});
+}
+
 function dottedBoothPin() {
 	const dots = document.querySelector('[data-dots-pin="image"]');
 	if (!dots) return;
@@ -1704,6 +1727,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	overlayScrollbar();
 	gsap.registerPlugin(ScrollTrigger);
 	smoothScroll();
+	nestedLenisScroll();
 	$.validator.setDefaults({
 		ignore: [], // Do not ignore any hidden elements
 	});
