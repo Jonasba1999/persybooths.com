@@ -118,7 +118,8 @@ input[type="number"] {
 }
 
 @media only screen and (min-width: 992px) {
-	.product-faq_accordion_item:hover .product-faq_accordion_btn {
+	.product-faq_accordion_item:hover .product-faq_accordion_btn,
+	.faq-list_accordion_item:hover .faq-list_accordion_btn {
 		background-color: var(--background-colors--lavender) !important;
 	}
 }
@@ -136,10 +137,12 @@ input[type="number"] {
 	}
 }
 
-.product-faq_accordion_item-wrap.is-open .product-faq_accordion_btn {
+.product-faq_accordion_item-wrap.is-open .product-faq_accordion_btn,
+.faq-list_accordion_item-wrap.is-open .faq-list_accordion_btn {
 	background-color: var(--background-colors--grey);
 }
-.product-faq_accordion_item-wrap.is-open .product-faq_accordion_btn-line.is-vertical {
+.product-faq_accordion_item-wrap.is-open .product-faq_accordion_btn-line.is-vertical,
+.faq-list_accordion_item-wrap.is-open .faq-lsit_accordion_btn-line.is-vertical {
 	display: none;
 }
 
@@ -528,4 +531,141 @@ html.lenis body {
 	.cky-notice-btn-wrapper {
 		flex-direction: row !important;
 	}
+}
+
+/* Anchor FAQ links */
+
+.faq-list_nav-link.is-current {
+	background-color: var(--background-colors--white);
+	color: var(--text-colors--black);
+}
+
+/* Specific Horizontal Scroll Sections */
+.faq-list_nav-wrap {
+	scrollbar-width: none; /* Firefox */
+	-ms-overflow-style: none; /* IE/Edge */
+}
+
+.faq-list_nav-wrap::-webkit-scrollbar {
+	height: 0; /* Chrome, Safari */
+}
+
+/* About us cards */
+
+.about-cards_card {
+	box-shadow: 0px 0px 16px 0px #00000008;
+}
+
+/* About us values list */
+
+.about-values_list_item.is-active .about-values_list_title,
+.about-values_list_item.is-active .about-values_list_description {
+	opacity: 1;
+}
+
+.about-values_list_title {
+	transition: opacity 0.3s ease;
+}
+
+.about-values_list_item.is-active .about-values_list_description {
+	transition: opacity 0.5s ease;
+}
+
+.about-values_list_item.no-hover {
+	pointer-events: none;
+}
+
+/* About values slider */
+
+.about-values_slider_nav-btn.is-disabled {
+	color: var(--text-colors--dark-grey);
+}
+
+/* Showroom */
+
+[data-showroom-search="item"].filter-hide {
+	display: none;
+}
+
+[data-showroom-search="item"]:first-child {
+	border: none;
+}
+
+@media only screen and (max-width: 767px) {
+	[data-showroom-search="item"].load-more-hide {
+		display: none;
+	}
+}
+
+.showroom_list_search-wrap .showroom__list_search-input:not(:placeholder-shown) ~ .showroom_list_search-icon {
+	color: black;
+}
+
+.showroom_list_search-wrap .showroom__list_search-input:not(:placeholder-shown) ~ .showroom_list_search-clear-btn {
+	display: block;
+}
+
+.showroom_map_marker-wrap,
+.showroom_map_cluster-marker {
+	background-color: var(--background-colors--lavender);
+	width: 2rem;
+	height: 2rem;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.showroom_map_marker-icon {
+	width: 1rem;
+	height: 1rem;
+	color: var(--text-colors--black);
+}
+
+.showroom_list_icon-wrap,
+[data-showroom-marker-item],
+.showroom_map_marker-icon,
+.showroom_list_marker-icon {
+	transition: all 0.2s ease;
+}
+
+[data-showroom-list-item].is-hovered .showroom_list_icon-wrap,
+.showroom_list_item:hover .showroom_list_icon-wrap,
+.showroom_map_marker-wrap:hover,
+[data-showroom-marker-item].is-hovered,
+[data-showroom-marker-item].is-open {
+	background-color: var(--background-colors--black);
+}
+
+[data-showroom-list-item].is-hovered .showroom_list_marker-icon,
+.showroom_list_item:hover .showroom_list_marker-icon,
+.showroom_map_marker-wrap:hover .showroom_map_marker-icon,
+[data-showroom-marker-item].is-hovered .showroom_map_marker-icon,
+[data-showroom-marker-item].is-open .showroom_map_marker-icon {
+	color: var(--text-colors--white);
+}
+
+/* Google maps */
+
+.gm-style-iw-chr {
+	display: none;
+}
+
+.gm-style .gm-style-iw-c {
+	padding: 1rem !important;
+	max-height: none !important;
+	max-width: 11.5rem !important;
+	border-radius: 4px !important;
+	box-shadow: 0px 8px 16px 0px #0000000d !important;
+	transform: translate3d(-12%, -100%, 0) !important;
+}
+
+.gm-style-iw-d {
+	overflow: auto !important;
+}
+
+.gm-style .gm-style-iw-tc::after,
+.gm-style .gm-style-iw-tc {
+	width: 0.625rem !important;
+	height: 0.375rem !important;
 }

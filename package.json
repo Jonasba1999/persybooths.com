@@ -11,10 +11,13 @@
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
+		"@googlemaps/markerclusterer": "^2.5.3",
 		"esbuild": "^0.24.0",
 		"gsap": "^3.12.5",
+		"install": "^0.13.0",
 		"jquery-validation": "^1.21.0",
 		"lenis": "^1.1.14",
+		"npm": "^11.0.0",
 		"overlayscrollbars": "^2.10.0",
 		"swiper": "^11.1.14"
 	}
