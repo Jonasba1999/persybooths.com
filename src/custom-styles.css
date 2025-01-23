@@ -59,7 +59,9 @@ input::-webkit-inner-spin-button {
 }
 
 input[type="number"] {
-	-moz-appearance: textfield;
+	-moz-appearance: textfield; /* Firefox */
+	-webkit-appearance: none; /* Chrome, Safari, Edge */
+	appearance: none; /* Standard property */
 }
 
 .form_select-toggle.w--open .form_select-icon {

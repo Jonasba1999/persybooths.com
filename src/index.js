@@ -2179,7 +2179,7 @@ function showroomSearch() {
 		let tl = gsap.timeline();
 
 		tl.set(emptyBlock, {
-			display: "flexGe",
+			display: "flex",
 		}).to(emptyBlock, {
 			autoAlpha: 1,
 			duration: 0.2,
