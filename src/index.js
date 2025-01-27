@@ -1194,6 +1194,14 @@ function customFormValidation() {
 		svgIcon + "Please select a valid option."
 	); // Custom error message
 
+	$.validator.addMethod(
+		"phone",
+		function (value, element) {
+			return this.optional(element) || /^[\+]?[\d\s\-\(\)]+$/.test(value);
+		},
+		"Please enter a valid phone number"
+	);
+
 	$("form").each(function () {
 		const validCountries = [];
 		const deliveryOptions = this.querySelectorAll('[data-custom-select="link"]');
@@ -1222,7 +1230,7 @@ function customFormValidation() {
 				},
 				Phone: {
 					required: false, // Optional field
-					digits: true, // Ensure it's only digits if filled
+					phone: true, // Ensure it's only digits if filled
 				},
 				"Quote-Delivery": {
 					required: true, // Required custom select dropdown field
