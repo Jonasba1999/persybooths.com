@@ -1126,7 +1126,7 @@ function homeHeroSlides() {
 					allowTouchMove: false,
 				},
 			},
-			speed: 600,
+			speed: 1000,
 			loop: true,
 			pagination: {
 				el: ".home-hero_swiper-pagination",
