@@ -1754,8 +1754,8 @@ function faqAnchorScroll() {
 
 		ScrollTrigger.create({
 			trigger: section,
-			start: "top 30%",
-			end: "bottom 30%",
+			start: "top 40%",
+			end: "bottom 40%",
 			toggleClass: {
 				targets: anchorLinks[index], // Add class to the corresponding link
 				className: "is-current",
@@ -2046,7 +2046,7 @@ async function showroomMap() {
 		mapTypeControl: false,
 		streetViewControl: false,
 		zoomControl: false,
-		mapId: "YOUR_MAP_ID_HERE", // Replace with your valid Map ID
+		mapId: "85116a18845892ec", // Replace with your valid Map ID
 		gestureHandling: "cooperative",
 	});
 
@@ -2328,7 +2328,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	megaMenuAnimation();
 	formUTMparameters();
 	formPageField();
-	footerParallax();
+	// footerParallax();
 	customFormSelect();
 	faqAnchorScroll();
 	draggableCardsAnimation();
