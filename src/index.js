@@ -1793,12 +1793,6 @@ function draggableCardsAnimation() {
 		cards.forEach((card) => {
 			Draggable.create(card, {
 				bounds: cardsContainer,
-				onClick: function () {
-					console.log("clicked");
-				},
-				onDragEnd: function () {
-					console.log("drag ended");
-				},
 			});
 		});
 	});
