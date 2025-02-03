@@ -1946,6 +1946,7 @@ async function showroomMap() {
 	const showroomInfoDescription = document.querySelector('[data-showroom-info="description"]');
 	const showroomInfoAddress = document.querySelector('[data-showroom-info="address"]');
 	const showroomInfoHours = document.querySelector('[data-showroom-info="hours"]');
+	const showroomInfoHoursBlock = document.querySelector('[data-showroom-info="hours-block"]');
 	const showroomInfoBooking = document.querySelector('[data-showroom-info="booking"]');
 
 	// Functions
@@ -1964,6 +1965,9 @@ async function showroomMap() {
 	}
 
 	function displayFullInfo(itemData, marker) {
+		// Center map to the active marker
+		map.panTo(marker.position);
+
 		showroomInfoName.textContent = itemData.name;
 		showroomInfoDescription.textContent = itemData.description;
 		showroomInfoAddress.textContent = itemData.address;
@@ -1971,6 +1975,17 @@ async function showroomMap() {
 		// Spliting working hours by ;
 		const splitHours = itemData.hours.split(";");
 		showroomInfoHours.innerHTML = splitHours.join("<br>");
+
+		// Hide hours info row if no hours set
+		if (!showroomInfoHours.textContent) {
+			gsap.set(showroomInfoHoursBlock, {
+				autoAlpha: 0,
+			});
+		} else {
+			gsap.set(showroomInfoHoursBlock, {
+				autoAlpha: 1,
+			});
+		}
 
 		if (activeMarker) {
 			activeMarker.content.classList.remove("is-open");
@@ -2092,12 +2107,16 @@ async function showroomMap() {
 
 		marker.content.addEventListener("mouseenter", () => {
 			const relatedListItem = document.querySelector(`[data-showroom-list-item=${itemData.slug}]`);
-			relatedListItem.classList.add("is-hovered");
+			if (relatedListItem) {
+				relatedListItem.classList.add("is-hovered");
+			}
 		});
 
 		marker.content.addEventListener("mouseleave", () => {
 			const relatedListItem = document.querySelector(`[data-showroom-list-item=${itemData.slug}]`);
-			relatedListItem.classList.remove("is-hovered");
+			if (relatedListItem) {
+				relatedListItem.classList.remove("is-hovered");
+			}
 		});
 
 		listItem.addEventListener("mouseenter", () => {
@@ -2154,6 +2173,7 @@ function showroomSearch() {
 
 	let listArray = [];
 
+	const listContainer = document.querySelector('[data-showroom-search="container"]');
 	const listWrap = document.querySelector('[data-showroom-search="list"]');
 	const clearBtn = document.querySelector('[data-showroom-search="clear"]');
 	const form = document.querySelector('[data-showroom-search="form"]');
@@ -2182,11 +2202,15 @@ function showroomSearch() {
 
 		tl.set(emptyBlock, {
 			display: "flex",
-		}).to(emptyBlock, {
-			autoAlpha: 1,
-			duration: 0.2,
-			ease: "linear",
-		});
+		})
+			.set(listContainer, {
+				display: "none",
+			})
+			.to(emptyBlock, {
+				autoAlpha: 1,
+				duration: 0.2,
+				ease: "linear",
+			});
 
 		isEmptyState = true;
 	}
@@ -2197,6 +2221,8 @@ function showroomSearch() {
 		tl.set(emptyBlock, {
 			display: "none",
 			autoAlpha: 0,
+		}).set(listContainer, {
+			display: "block",
 		});
 
 		isEmptyState = false;
@@ -2212,6 +2238,7 @@ function showroomSearch() {
 			}
 		});
 
+		console.log(filteredElements);
 		return filteredElements;
 	}
 
@@ -2219,6 +2246,7 @@ function showroomSearch() {
 		// Reset loadMorePosts array
 		loadMorePosts = [];
 		filteredElements.forEach((element, index) => {
+			element.classList.remove("load-more-hide");
 			if (index > 4 && !loadMoreClicked) {
 				element.classList.add("load-more-hide");
 				loadMorePosts.push(element);
