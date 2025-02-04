@@ -1509,7 +1509,7 @@ function navBgAnimation() {
 
 	// Logic for product inner pages
 	function isActiveNav(link) {
-		return link.classList.contains("w--current") || currentUrl.includes(link.href);
+		return link.classList.contains("w--current") || link.querySelector(".w--current");
 	}
 
 	function getLinkInfo(link) {
@@ -1587,31 +1587,33 @@ function navBgAnimation() {
 	});
 }
 
-function megaMenuAnimation() {
-	const menuTrigger = document.querySelector('[data-mega-menu="trigger"]');
-	if (!menuTrigger) return;
+function menuDropdownAnimation() {
+	const menuTriggers = document.querySelectorAll('[data-dropdown-menu="trigger"]');
+	if (!menuTriggers.length) return;
 
-	const menuWrap = document.querySelector('[data-mega-menu="wrap"]');
-	const contentWrap = document.querySelector('[data-mega-menu="content"]');
+	menuTriggers.forEach((menuTrigger) => {
+		const menuWrap = menuTrigger.querySelector('[data-dropdown-menu="wrap"]');
+		const contentWrap = menuTrigger.querySelector('[data-dropdown-menu="content"]');
 
-	const menuHeight = contentWrap.scrollHeight;
+		const menuHeight = contentWrap.scrollHeight;
 
-	let menuTl = gsap.timeline({ paused: true });
+		let menuTl = gsap.timeline({ paused: true });
 
-	menuTl.set(menuWrap, {
-		display: "flex",
-	});
-	menuTl.to(menuWrap, {
-		height: "auto",
-		duration: 0.8,
-		ease: "power3.inOut",
-	});
+		menuTl.set(menuWrap, {
+			display: "flex",
+		});
+		menuTl.to(menuWrap, {
+			height: "auto",
+			duration: 0.6,
+			ease: "power3.inOut",
+		});
 
-	menuTrigger.addEventListener("mouseenter", () => {
-		menuTl.play();
-	});
-	menuTrigger.addEventListener("mouseleave", () => {
-		menuTl.reverse();
+		menuTrigger.addEventListener("mouseenter", () => {
+			menuTl.play();
+		});
+		menuTrigger.addEventListener("mouseleave", () => {
+			menuTl.reverse();
+		});
 	});
 }
 
@@ -2310,6 +2312,23 @@ function showroomSearch() {
 	});
 }
 
+function mobileKnowledgeBlogSlider() {
+	const swiperTarget = document.querySelector("[data-knowledge-blog-swiper]");
+
+	if (!swiperTarget) return;
+
+	const swiper = new Swiper(swiperTarget, {
+		slidesPerView: 1.3,
+		speed: 600,
+		spaceBetween: 16,
+		breakpoints: {
+			767: {
+				slidesPerView: 2.3,
+			},
+		},
+	});
+}
+
 document.addEventListener("DOMContentLoaded", () => {
 	overlayScrollbar();
 	gsap.registerPlugin(ScrollTrigger);
@@ -2347,7 +2366,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	indexStoryImagesParallax();
 	cookiesPopup();
 	navBgAnimation();
-	megaMenuAnimation();
+	menuDropdownAnimation();
 	formUTMparameters();
 	formPageField();
 	// footerParallax();
@@ -2360,6 +2379,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	aboutCardsExpand();
 	showroomMap();
 	showroomSearch();
+	mobileKnowledgeBlogSlider();
 	setTimeout(() => {
 		ScrollTrigger.sort();
 		ScrollTrigger.refresh();

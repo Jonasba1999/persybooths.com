@@ -671,3 +671,19 @@ html.lenis body {
 	width: 0.625rem !important;
 	height: 0.375rem !important;
 }
+
+/* Knowledge Downloads */
+
+@media only screen and (min-width: 992px) {
+	.knowledge-downloads_list-col .knowledge-downloads_item:first-child {
+		padding-top: 0;
+	}
+}
+
+.knowledge-downloads_list-col .knowledge-downloads_item:last-child {
+	padding-bottom: 0;
+	border-bottom: none;
+}
+.knowledge-downloads_list-col .knowledge-downloads_item:hover .knowledge-downloads_icon-wrap {
+	background-color: var(--background-colors--lavender);
+}
