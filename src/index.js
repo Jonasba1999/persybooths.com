@@ -2329,6 +2329,28 @@ function mobileKnowledgeBlogSlider() {
 	});
 }
 
+function knowledgePostGallerySlider() {
+	const swiperTarget = document.querySelector("[data-knowledge-gallery-swiper]");
+
+	if (!swiperTarget) return;
+
+	const swiper = new Swiper(swiperTarget, {
+		modules: [Navigation],
+		slidesPerView: "auto",
+		speed: 800,
+		spaceBetween: 16,
+		breakpoints: {
+			992: {
+				spaceBetween: 20,
+			},
+		},
+		navigation: {
+			nextEl: ".knowledge-block_gallery_swiper-btn.is-next",
+			prevEl: ".knowledge-block_gallery_swiper-btn.is-prev",
+		},
+	});
+}
+
 document.addEventListener("DOMContentLoaded", () => {
 	overlayScrollbar();
 	gsap.registerPlugin(ScrollTrigger);
@@ -2380,6 +2402,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	showroomMap();
 	showroomSearch();
 	mobileKnowledgeBlogSlider();
+	knowledgePostGallerySlider();
 	setTimeout(() => {
 		ScrollTrigger.sort();
 		ScrollTrigger.refresh();

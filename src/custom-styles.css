@@ -84,6 +84,22 @@ input[type="number"] {
 
 /* Accordions */
 
+[data-accordion="trigger"]:hover .accordion_icon-wrap {
+	background-color: var(--background-colors--lavender);
+}
+
+[data-accordion="accordion-item"].is-open .accordion_icon-wrap {
+	background-color: var(--background-colors--grey);
+}
+
+[data-accordion="accordion-item"].is-open .accordion_icon-wrap.is-grey {
+	background-color: var(--background-colors--medium-grey);
+}
+
+[data-accordion="accordion-item"].is-open .accordion_line.is-vertical {
+	display: none;
+}
+
 .product-spec_tech_trigger-wrap:hover .product-spec_accordion_btn {
 	background-color: var(--background-colors--lavender);
 }
@@ -686,4 +702,71 @@ html.lenis body {
 }
 .knowledge-downloads_list-col .knowledge-downloads_item:hover .knowledge-downloads_icon-wrap {
 	background-color: var(--background-colors--lavender);
+}
+
+/* Client stories */
+
+.stories-list_radio-wrap.fs-cmsfilter_active {
+	background-color: var(--background-colors--light-gray);
+	color: var(--text-colors--black);
+}
+
+.stories-list_filters-wrap {
+	overflow: auto; /* Enables scrolling */
+	-ms-overflow-style: none; /* IE and Edge */
+	scrollbar-width: none; /* Firefox */
+}
+
+.stories-list_filters-wrap::-webkit-scrollbar {
+	display: none; /* Chrome, Safari, Edge */
+}
+
+/* Blogs & articles */
+
+.blogs-list_radio-wrap.fs-cmsfilter_active {
+	background-color: var(--background-colors--light-gray);
+	color: var(--text-colors--black);
+}
+
+.blogs-list_filters-wrap {
+	overflow: auto; /* Enables scrolling */
+	-ms-overflow-style: none; /* IE and Edge */
+	scrollbar-width: none; /* Firefox */
+}
+
+.blogs-list_filters-wrap::-webkit-scrollbar {
+	display: none; /* Chrome, Safari, Edge */
+}
+
+li::marker {
+	font-size: 0.875rem;
+}
+
+/* Knowledge blocks */
+
+.knowledge-block_download .knowledge-block_download_item:last-child {
+	padding-bottom: 0;
+}
+
+.knowledge-block_download_item:hover .knowledge-block_download_icon-wrap {
+	background-color: var(--background-colors--lavender);
+}
+
+.knowledge-block_accordion .knowledge-block_accordion_item-wrap:last-child {
+	padding-bottom: 0;
+}
+
+/* Downloads */
+
+.downloads-list_section-block .downloads-list_item:last-child {
+	padding-bottom: 0;
+}
+
+.downloads-list_item:hover .downloads-list_icon-wrap {
+	background-color: var(--background-colors--lavender);
+}
+
+.downloads-list_nav-link.is-current {
+	background-color: var(--background-colors--white);
+	color: var(--text-colors--black);
 }
