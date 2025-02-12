@@ -163,22 +163,18 @@ export async function showroomMap() {
 		mapTypeControl: false,
 		streetViewControl: false,
 		zoomControl: false,
-		// scrollwheel: false,
 		mapId: "85116a18845892ec", // Replace with your valid Map ID
 		gestureHandling: "cooperative",
 	});
 
 	// Disabling lenis when using CMD + Mousewheel to zoomin/out
-	let isZooming = false;
 	mapContainer.addEventListener("wheel", (event) => {
 		if (event.ctrlKey || event.metaKey) {
 			lenis.stop();
-			isZooming = true;
 
 			// Wait for the zooming to stop, then re-enable Lenis
 			clearTimeout(window.zoomTimeout);
 			window.zoomTimeout = setTimeout(() => {
-				isZooming = false;
 				lenis.start();
 			}, 300); // Adjust delay as needed
 		}
@@ -304,7 +300,6 @@ export async function showroomMap() {
 		map,
 		renderer: {
 			render: ({ count, position, markers }) => {
-				clusterToMarkersMap.clear();
 				// Create custom cluster content
 				const clusterElement = document.createElement("div");
 				clusterElement.className = "showroom_map_cluster-marker caption-style-m";
@@ -319,6 +314,11 @@ export async function showroomMap() {
 				});
 			},
 		},
+	});
+
+	// Clear clusters on zoom change (when google reredners clusters)
+	google.maps.event.addListener(map, "zoom_changed", () => {
+		clusterToMarkersMap.clear();
 	});
 }
 

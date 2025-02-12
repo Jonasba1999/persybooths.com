@@ -1,13 +1,8 @@
 // Importing custom css
 import "./custom-styles.css";
-import Lenis from "lenis";
 import { gsap } from "gsap";
 import { Draggable } from "gsap/Draggable";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-// Overlay scrollbar
-import "overlayscrollbars/overlayscrollbars.css";
-import { OverlayScrollbars, ScrollbarsHidingPlugin, SizeObserverPlugin, ClickScrollPlugin } from "overlayscrollbars";
 
 // Importing JS from /modules
 import { showroomMap, showroomSearch } from "./modules/showroomMap.js";
@@ -42,49 +37,8 @@ import {
 	productFeaturesVideo,
 } from "./modules/animations.js";
 import { accordionAnimation } from "./modules/accordion.js";
-
-// Global lenis instance
-let lenis;
-function smoothScroll() {
-	lenis = new Lenis({
-		lerp: 0.1,
-	});
-
-	lenis.on("scroll", ScrollTrigger.update);
-	gsap.ticker.add((time) => {
-		lenis.raf(time * 1000);
-	});
-
-	gsap.ticker.lagSmoothing(0);
-}
-
-function nestedLenisScroll() {
-	const nestedTargets = document.querySelectorAll('[data-nested-lenis="wrapper"]');
-	if (!nestedTargets.length) return;
-
-	nestedTargets.forEach((wrapper) => {
-		const content = wrapper.querySelector('[data-nested-lenis="content"]');
-		const isMobile = window.matchMedia("(max-width: 768px)").matches;
-
-		// Skip Lenis initialization on showroom mobile
-		if (isMobile && wrapper.getAttribute("data-disable-lenis") === "mobile") {
-			return;
-		}
-
-		const nestedLenis = new Lenis({
-			wrapper: wrapper,
-			content: content,
-			lerp: 0.1,
-			overscroll: false,
-		});
-
-		gsap.ticker.add((time) => {
-			if (nestedLenis) {
-				nestedLenis.raf(time * 1000);
-			}
-		});
-	});
-}
+import { smoothScroll, nestedLenisScroll, toggleScroll } from "./modules/smoothScroll.js";
+import { overlayScrollbar } from "./modules/scrollbar.js";
 
 function sideModalAnimation() {
 	// Getting all modals on the page
@@ -428,39 +382,6 @@ function mobileMenuAnimation() {
 			menuOpen = false;
 		});
 	});
-}
-
-function toggleScroll(disable = false) {
-	if (disable) {
-		lenis.stop();
-		osInstance.options({
-			overflow: {
-				x: "hidden", // Disable horizontal scrolling
-				y: "hidden", // Disable vertical scrolling
-			},
-			scrollbars: {
-				visibility: "hidden", // Hide the scrollbars
-			},
-		});
-	} else {
-		lenis.start();
-		osInstance.options({
-			overflow: {
-				x: "scroll", // Re-enable horizontal scrolling (if applicable)
-				y: "scroll", // Re-enable vertical scrolling
-			},
-			scrollbars: {
-				visibility: "auto", // Make the scrollbars visible again
-			},
-		});
-	}
-}
-
-// Global overlay instance
-let osInstance;
-function overlayScrollbar() {
-	// Simple initialization with an element
-	osInstance = OverlayScrollbars(document.body, {});
 }
 
 function indexStoryImagesParallax() {
