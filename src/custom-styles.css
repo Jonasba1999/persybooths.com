@@ -199,7 +199,7 @@ input[type="number"] {
 	display: none;
 }
 .mobile-menu_accordion-item.is-open .mobile-menu_accordion-trigger.has-border {
-	border: none;
+	border-bottom: none;
 }
 
 .mobile-menu_wrap {
