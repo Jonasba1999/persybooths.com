@@ -39,6 +39,7 @@ import {
 import { accordionAnimation } from "./modules/accordion.js";
 import { smoothScroll, nestedLenisScroll, toggleScroll } from "./modules/smoothScroll.js";
 import { overlayScrollbar } from "./modules/scrollbar.js";
+import { displayCurrentYear, getCartCount } from "./modules/utils.js";
 
 function sideModalAnimation() {
 	// Getting all modals on the page
@@ -136,17 +137,6 @@ function sideModalAnimation() {
 			const { timeline, modal } = modalTimelines[hash];
 			openModal(timeline, modal);
 		}
-	});
-}
-
-function displayCurrentYear() {
-	const targetTexts = document.querySelectorAll('[data-display-year="text"]');
-	if (!targetTexts.length) return;
-
-	const currentYear = new Date().getFullYear();
-
-	targetTexts.forEach((text) => {
-		text.textContent = currentYear;
 	});
 }
 
@@ -637,6 +627,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	reasonsSliderHover();
 	testimonialsSlider();
 	displayCurrentYear();
+	getCartCount();
 	quoteFormQtyInput();
 	productImagesSlider();
 	rotatingText();
