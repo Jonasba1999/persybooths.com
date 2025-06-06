@@ -47,7 +47,8 @@ export function accordionAnimation() {
 				}
 			);
 
-			accordionTrigger.addEventListener("click", () => {
+			accordionTrigger.addEventListener("click", (e) => {
+				e.preventDefault();
 				accordion.classList.toggle("is-open");
 				if (accordion.classList.contains("is-open")) {
 					openAccordion(accordion, accordionTl);
