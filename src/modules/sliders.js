@@ -398,3 +398,55 @@ export function knowledgePostGallerySlider() {
 		},
 	});
 }
+
+export function thingsToWatchLandingSlider() {
+	const sliderOneElement = document.querySelector(".things-to-watch-out-for-mobile_swiper");
+	if (sliderOneElement) {
+		new Swiper(sliderOneElement, {
+			modules: [Navigation],
+			slidesPerView: 1.3,
+			speed: 600,
+			spaceBetween: 16,
+			breakpoints: {
+				992: {
+					slidesPerView: 4.5,
+					spaceBetween: 8,
+				},
+				768: {
+					slidesPerView: 2.7,
+					spaceBetween: 20,
+				},
+			},
+			navigation: {
+				disabledClass: "is-disabled",
+				nextEl: ".things-to-watch-out-for-mobile_slider-btn-next",
+				prevEl: ".things-to-watch-out-for-mobile_slider-btn-prev",
+			},
+		});
+	}
+
+	const sliderTwoElement = document.querySelector(".things-to-watch-out-for-mobile_swiper-2");
+	if (sliderTwoElement) {
+		new Swiper(sliderTwoElement, {
+			modules: [Navigation],
+			slidesPerView: 1.3,
+			speed: 600,
+			spaceBetween: 16,
+			breakpoints: {
+				992: {
+					slidesPerView: 4.5,
+					spaceBetween: 8,
+				},
+				768: {
+					slidesPerView: 2.7,
+					spaceBetween: 20,
+				},
+			},
+			navigation: {
+				disabledClass: "is-disabled",
+				nextEl: ".things-to-watch-out-for-mobile_slider-btn-next-2",
+				prevEl: ".things-to-watch-out-for-mobile_slider-btn-prev-2",
+			},
+		});
+	}
+}

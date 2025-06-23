@@ -19,6 +19,7 @@ import {
 	aboutValuesSlider,
 	mobileKnowledgeBlogSlider,
 	knowledgePostGallerySlider,
+	thingsToWatchLandingSlider,
 } from "./modules/sliders.js";
 import { customCursorAnimation } from "./modules/cursor.js";
 import { customFormValidation, quoteFormQtyInput, formUTMparameters, formPageField, customFormSelect } from "./modules/forms.js";
@@ -35,6 +36,7 @@ import {
 	aboutValuesListHover,
 	aboutCardsExpand,
 	productFeaturesVideo,
+	initStackingNav,
 } from "./modules/animations.js";
 import { accordionAnimation } from "./modules/accordion.js";
 import { smoothScroll, nestedLenisScroll, toggleScroll } from "./modules/smoothScroll.js";
@@ -660,6 +662,8 @@ document.addEventListener("DOMContentLoaded", () => {
 	showroomSearch();
 	mobileKnowledgeBlogSlider();
 	knowledgePostGallerySlider();
+	thingsToWatchLandingSlider();
+	initStackingNav();
 	setTimeout(() => {
 		ScrollTrigger.sort();
 		ScrollTrigger.refresh();

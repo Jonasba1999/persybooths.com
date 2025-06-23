@@ -436,3 +436,47 @@ export function productFeaturesVideo() {
 		});
 	});
 }
+
+export function initStackingNav() {
+	const cards = document.querySelectorAll(".comparison-features_card");
+
+	if (!cards.length) return;
+
+	cards.forEach((card, index) => {
+		const previousCards = Array.from(cards).slice(0, index);
+
+		// Scale animation for stacking cards
+		gsap
+			.timeline({
+				scrollTrigger: {
+					trigger: card,
+					start: "top 100%", // Start at 35% for smoother transitions
+					end: "top top",
+					scrub: 1,
+				},
+			})
+			.to(previousCards, {
+				scale: (i) => 1 - 0.064 * (index - i), // Reduce size by 64px per card
+				ease: "power1.out", // Smooth easing
+			});
+
+		// Overlay opacity animation
+		const overlay = card.querySelector(".comaprison-features_card-overlay");
+		if (overlay) {
+			gsap
+				.timeline({
+					scrollTrigger: {
+						trigger: card,
+						start: "top 60%", // Start opacity change when overlap begins
+						end: "bottom top", // Gradual fade as card moves
+						scrub: 1,
+					},
+				})
+				.to(overlay, {
+					opacity: 1, // Animate overlay to full opacity
+					duration: 20, // Extend duration for slower transition
+					ease: "power1.inOut",
+				});
+		}
+	});
+}
