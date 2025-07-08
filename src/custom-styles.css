@@ -766,3 +766,9 @@ li::marker {
 	background-color: var(--background-colors--white);
 	color: var(--text-colors--black);
 }
+
+/* Disable text area input resize */
+
+textarea {
+	resize: none;
+}

@@ -219,7 +219,9 @@ export function formUTMparameters() {
 export function formPageField() {
 	const forms = document.querySelectorAll("form");
 	if (!forms.length) return;
-	const pageURL = window.location.href;
+
+	// Just the clean URL without any parameters or fragments
+	const pageURL = window.location.origin + window.location.pathname;
 
 	forms.forEach((form) => {
 		const urlField = form.querySelector('input[name="Page-URL"]');
