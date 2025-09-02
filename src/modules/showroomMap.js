@@ -281,8 +281,14 @@ export async function showroomMap() {
 	});
 
 	// Add event listeners for zoom buttons
-	zoomInButton.addEventListener("click", () => map.setZoom(map.getZoom() + 1));
-	zoomOutButton.addEventListener("click", () => map.setZoom(map.getZoom() - 1));
+	zoomInButton.addEventListener("click", (e) => {
+		e.preventDefault();
+		map.setZoom(map.getZoom() + 1);
+	});
+	zoomOutButton.addEventListener("click", (e) => {
+		e.preventDefault();
+		map.setZoom(map.getZoom() - 1);
+	});
 
 	// Add event listener to info wrap close btn
 	showroomClose.addEventListener("click", () => {
