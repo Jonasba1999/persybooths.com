@@ -6,6 +6,12 @@ export async function showroomMap() {
 
 	if (!mapContainer) return;
 
+	const zoomLevel = parseInt(mapContainer.dataset.zoom) || 5;
+	const centerLat = parseFloat(mapContainer.dataset.centerLat) || 51.0569311;
+	const centerLng = parseFloat(mapContainer.dataset.centerLng) || 5.177956;
+
+	const centerCoordinate = { lat: centerLat, lng: centerLng };
+
 	const showroomListItems = document.querySelectorAll("[data-showroom-list-item]");
 	let markers = [];
 
@@ -157,8 +163,8 @@ export async function showroomMap() {
 
 	// 1. Initialize the map
 	const map = new Map(mapContainer, {
-		center: { lat: 51.0569311, lng: 5.177956 },
-		zoom: 5,
+		center: centerCoordinate,
+		zoom: zoomLevel,
 		fullscreenControl: false,
 		mapTypeControl: false,
 		streetViewControl: false,
