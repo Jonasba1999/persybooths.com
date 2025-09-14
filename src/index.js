@@ -44,6 +44,7 @@ import {
 	productFeaturesVideo,
 	initStackingNav,
 	boothSoundCompare,
+	imageParallaxAnimation,
 } from "./modules/animations.js";
 import { accordionAnimation } from "./modules/accordion.js";
 import { smoothScroll, nestedLenisScroll, toggleScroll } from "./modules/smoothScroll.js";
@@ -288,12 +289,14 @@ function popupAnimation() {
 		});
 
 		// Attach close event listeners
-		closeBtn.addEventListener("click", () => {
+		closeBtn.addEventListener("click", (e) => {
+			e.preventDefault();
 			closePopup(popupTl);
 		});
 
 		// Close popup via overlay click
-		popupOverlay.addEventListener("click", () => {
+		popupOverlay.addEventListener("click", (e) => {
+			e.preventDefault();
 			closePopup(popupTl);
 		});
 	});
@@ -683,6 +686,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	productCompareSlider();
 	boothSoundCompare();
 	soundFeaturesSlider();
+	imageParallaxAnimation();
 	setTimeout(() => {
 		ScrollTrigger.sort();
 		ScrollTrigger.refresh();

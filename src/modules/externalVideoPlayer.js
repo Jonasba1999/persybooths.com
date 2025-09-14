@@ -19,18 +19,9 @@ export function externalVideoPlayer() {
 		}
 	}
 
-	function setVideoSrc(videoURL, videoEl) {
-		const sourceEl = videoEl.querySelector("source");
-		sourceEl.src = videoURL;
-	}
-
 	externalVideos.forEach((externalVideo) => {
 		// Set video SRC from data attribute if there is one (for components like slider)
 		const videoURL = externalVideo.dataset.externalVideoWrap;
-
-		if (videoURL) {
-			setVideoSrc(videoURL, externalVideo);
-		}
 
 		// Get video element for play/pause
 		const videoEl = externalVideo.querySelector("video");
@@ -38,6 +29,11 @@ export function externalVideoPlayer() {
 		// Play and Pause functionality
 		const videoButton = externalVideo.querySelector("[data-external-video-btn]");
 
+		if (videoURL) {
+			const sourceEl = videoEl.querySelector("source");
+			sourceEl.src = videoURL;
+			videoEl.load();
+		}
 		videoButton.addEventListener("click", (e) => {
 			e.preventDefault();
 

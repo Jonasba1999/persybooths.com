@@ -296,11 +296,12 @@ html.lenis body {
 }
 
 /* PRODUCTS LIST */
-
-.products_item:hover .products_image,
-.header_mega_product-link:hover .header_mega_product-img,
-.index-products_link-wrap:hover .index-products_image {
-	transform: scale(1.1);
+@media only screen and (min-width: 992px) {
+	.products_item:hover .products_image,
+	.header_mega_product-link:hover .header_mega_product-img,
+	.index-products_link-wrap:hover .index-products_image {
+		transform: scale(1.1);
+	}
 }
 
 /* CookieYES */

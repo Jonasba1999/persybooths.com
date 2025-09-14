@@ -483,6 +483,9 @@ export function initStackingNav() {
 }
 
 export function boothSoundCompare() {
+	const animationTarget = document.querySelector("[data-sound-animation-target]");
+	if (!animationTarget) return;
+
 	const outsideNoise = new Audio("https://cdn.prod.website-files.com/6801d6dc5d6eee6b305b8333/68c306c11b7eb9069faedada_footsteps-approaching-316715.mp3");
 	const insideNoise = new Audio("https://cdn.prod.website-files.com/6801d6dc5d6eee6b305b8333/68c306c100ef23b9d8452454_keyboard-typing-139083.mp3");
 
@@ -497,9 +500,6 @@ export function boothSoundCompare() {
 	let loadedMetadataCounter = 0;
 
 	const playButton = document.querySelector('[data-sound-play="button"]');
-
-	if (!playButton) return;
-
 	const playIcon = playButton.querySelector('[data-sound-play="icon-play"]');
 	const pauseIcon = playButton.querySelector('[data-sound-play="icon-pause"]');
 
@@ -625,5 +625,30 @@ export function boothSoundCompare() {
 		if (insideNoise.ended) {
 			handleAudioEnd();
 		}
+	});
+}
+
+export function imageParallaxAnimation() {
+	const parallaxWraps = document.querySelectorAll("[data-image-parallax]");
+
+	if (!parallaxWraps.length) return;
+
+	parallaxWraps.forEach((wrap) => {
+		const images = wrap.querySelectorAll("img");
+
+		let tl = gsap.timeline({
+			scrollTrigger: {
+				trigger: wrap,
+				start: "top bottom",
+				end: "bottom top",
+				scrub: true,
+			},
+		});
+
+		tl.to(images, {
+			top: "0%",
+			ease: "linear",
+			overwrite: true,
+		});
 	});
 }
