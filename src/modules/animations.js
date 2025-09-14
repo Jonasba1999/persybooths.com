@@ -497,6 +497,9 @@ export function boothSoundCompare() {
 	let loadedMetadataCounter = 0;
 
 	const playButton = document.querySelector('[data-sound-play="button"]');
+
+	if (!playButton) return;
+
 	const playIcon = playButton.querySelector('[data-sound-play="icon-play"]');
 	const pauseIcon = playButton.querySelector('[data-sound-play="icon-pause"]');
 

@@ -820,3 +820,11 @@ textarea {
 		order: -1;
 	}
 }
+
+/* External video player */
+[data-external-video-btn="play"] .external-video_control-icon.is-pause {
+	display: none;
+}
+[data-external-video-btn="pause"] .external-video_control-icon.is-play {
+	display: none;
+}

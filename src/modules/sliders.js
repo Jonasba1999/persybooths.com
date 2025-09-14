@@ -523,9 +523,6 @@ export function gallerySlider() {
 	swiperTargets.forEach((target) => {
 		const swiper = new Swiper(target, {
 			modules: [Navigation, Autoplay],
-			autoplay: {
-				delay: 3000,
-			},
 			slidesPerView: 1.1,
 			speed: 800,
 			spaceBetween: 20,

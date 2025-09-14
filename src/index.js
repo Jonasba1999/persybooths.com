@@ -49,7 +49,7 @@ import { accordionAnimation } from "./modules/accordion.js";
 import { smoothScroll, nestedLenisScroll, toggleScroll } from "./modules/smoothScroll.js";
 import { overlayScrollbar } from "./modules/scrollbar.js";
 import { displayCurrentYear, getCartCount } from "./modules/utils.js";
-import { videoSlides } from "./modules/videoSlides.js";
+import { externalVideoPlayer } from "./modules/externalVideoPlayer.js";
 import { productCompare } from "./modules/productCompare.js";
 
 function sideModalAnimation() {
@@ -678,7 +678,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	boothFeaturesSlider();
 	gallerySlider();
 	initStackingNav();
-	videoSlides();
+	externalVideoPlayer();
 	productCompare();
 	productCompareSlider();
 	boothSoundCompare();
