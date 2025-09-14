@@ -3,6 +3,7 @@ import "./custom-styles.css";
 import { gsap } from "gsap";
 import { Draggable } from "gsap/Draggable";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
 
 // Importing JS from /modules
 import { showroomMap, showroomSearch } from "./modules/showroomMap.js";
@@ -10,6 +11,7 @@ import {
 	testimonialsSlider,
 	reasonsSlider,
 	productImagesSlider,
+	productImagesSlider2,
 	productFeaturesSlider,
 	productMobilitySlider,
 	mobileUsageSwiper,
@@ -20,6 +22,10 @@ import {
 	mobileKnowledgeBlogSlider,
 	knowledgePostGallerySlider,
 	thingsToWatchLandingSlider,
+	boothFeaturesSlider,
+	gallerySlider,
+	productCompareSlider,
+	soundFeaturesSlider,
 } from "./modules/sliders.js";
 import { customCursorAnimation } from "./modules/cursor.js";
 import { customFormValidation, quoteFormQtyInput, formUTMparameters, formPageField, customFormSelect } from "./modules/forms.js";
@@ -37,11 +43,14 @@ import {
 	aboutCardsExpand,
 	productFeaturesVideo,
 	initStackingNav,
+	boothSoundCompare,
 } from "./modules/animations.js";
 import { accordionAnimation } from "./modules/accordion.js";
 import { smoothScroll, nestedLenisScroll, toggleScroll } from "./modules/smoothScroll.js";
 import { overlayScrollbar } from "./modules/scrollbar.js";
 import { displayCurrentYear, getCartCount } from "./modules/utils.js";
+import { videoSlides } from "./modules/videoSlides.js";
+import { productCompare } from "./modules/productCompare.js";
 
 function sideModalAnimation() {
 	// Getting all modals on the page
@@ -114,7 +123,8 @@ function sideModalAnimation() {
 
 		// Attach click event to each trigger to open the modal
 		triggers.forEach((trigger) => {
-			trigger.addEventListener("click", () => {
+			trigger.addEventListener("click", (e) => {
+				e.preventDefault();
 				openModal(modalTl, modal);
 			});
 		});
@@ -613,6 +623,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	overlayScrollbar();
 	gsap.registerPlugin(ScrollTrigger);
 	gsap.registerPlugin(Draggable);
+	gsap.registerPlugin(DrawSVGPlugin);
 	smoothScroll();
 	nestedLenisScroll();
 	$.validator.setDefaults({
@@ -632,6 +643,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	getCartCount();
 	quoteFormQtyInput();
 	productImagesSlider();
+	productImagesSlider2();
 	rotatingText();
 	productFeaturesSlider();
 	accordionAnimation();
@@ -663,7 +675,14 @@ document.addEventListener("DOMContentLoaded", () => {
 	mobileKnowledgeBlogSlider();
 	knowledgePostGallerySlider();
 	thingsToWatchLandingSlider();
+	boothFeaturesSlider();
+	gallerySlider();
 	initStackingNav();
+	videoSlides();
+	productCompare();
+	productCompareSlider();
+	boothSoundCompare();
+	soundFeaturesSlider();
 	setTimeout(() => {
 		ScrollTrigger.sort();
 		ScrollTrigger.refresh();

@@ -9,11 +9,11 @@
 	cursor: pointer;
 }
 /* Adjust to always display swiper correctly on front-end when in designer grid or flex column is used for visibility */
-.swiper-wrapper {
+/* .swiper-wrapper {
 	flex-direction: row !important;
 	display: flex !important;
 	gap: 0 !important;
-}
+} */
 
 .features-scroll_modal-btn,
 .mobile-features_modal-btn {
@@ -48,6 +48,24 @@
 .reasons-slider_btn-next.is-disabled .reasons-slider_nav-icon,
 .reasons-slider_btn-prev.is-disabled .reasons-slider_nav-icon {
 	color: var(--text-colors--medium-grey);
+}
+
+/* Gallery slider */
+.gallery-slider_nav-btn.is-disabled {
+	pointer-events: none;
+}
+
+.gallery-slider_nav-btn.is-disabled .gallery-slider_nav-btn-icon {
+	color: var(--text-colors--dark-grey);
+}
+
+.gallery-slider_cursor-nav-btn.is-disabled {
+	display: none;
+}
+
+/* Product gallery slider */
+.product-hero2_thumb-swiper_slide.swiper-slide-thumb-active {
+	border-color: var(--border-colors--dark-grey);
 }
 
 /* Quote modal */
@@ -280,7 +298,8 @@ html.lenis body {
 /* PRODUCTS LIST */
 
 .products_item:hover .products_image,
-.header_mega_product-link:hover .header_mega_product-img {
+.header_mega_product-link:hover .header_mega_product-img,
+.index-products_link-wrap:hover .index-products_image {
 	transform: scale(1.1);
 }
 
@@ -771,4 +790,33 @@ li::marker {
 
 textarea {
 	resize: none;
+}
+
+/* Product compare */
+.product-compare_item:hover .product-compare_secondary-button {
+	opacity: 100;
+}
+
+.product-compare_item.is-current .product-compare_icon,
+.product-compare_item.is-current .product-compare_link-block,
+.product-compare_item.is-current .product-compare_secondary-button {
+	display: none;
+}
+
+.product-compare_item.is-current .product-compare_item-wrap {
+	background-color: var(--background-colors--white);
+}
+
+.product-compare_item.is-current .product-compare_main-buttons {
+	display: flex;
+}
+
+@media only screen and (max-width: 991px) {
+	.product-compare_item:not(.is-current) .product-compare_secondary-button {
+		opacity: 100;
+	}
+
+	.product-compare_item.is-current {
+		order: -1;
+	}
 }

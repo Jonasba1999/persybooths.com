@@ -1,5 +1,5 @@
 import Swiper from "swiper";
-import { Navigation, Pagination, Autoplay, EffectFade } from "swiper/modules";
+import { Navigation, Pagination, Autoplay, EffectFade, Thumbs } from "swiper/modules";
 // import Swiper and modules styles
 import "swiper/css";
 import "swiper/css/navigation";
@@ -25,7 +25,8 @@ export function testimonialsSlider() {
 				slidesPerView: 2,
 			},
 			992: {
-				slidesPerView: 2,
+				slidesPerView: 3,
+				spaceBetween: 32,
 			},
 		},
 		pagination: {
@@ -35,8 +36,8 @@ export function testimonialsSlider() {
 			clickable: true,
 		},
 		navigation: {
-			prevEl: ".testimonials-slider_swiper-btn.is-prev",
-			nextEl: ".testimonials-slider_swiper-btn.is-next",
+			prevEl: ".testimonials-slider_swiper-btn.prev",
+			nextEl: ".testimonials-slider_swiper-btn.next",
 		},
 	});
 }
@@ -100,6 +101,37 @@ export function productImagesSlider() {
 			navigation: {
 				nextEl: ".product-hero_swiper-btn.is-next",
 				prevEl: ".product-hero_swiper-btn.is-prev",
+			},
+		});
+	});
+}
+
+export function productImagesSlider2() {
+	const gallerySwiperWraps = document.querySelectorAll("[data-product-gallery-wrap]");
+	if (!gallerySwiperWraps.length) return;
+
+	gallerySwiperWraps.forEach((wrap) => {
+		const mainSwiperTarget = wrap.querySelector('[data-swiper-target="product-images"]');
+		const thumbSwiperTarget = wrap.querySelector('[data-swiper-target="product-thumbs"]');
+		if (!mainSwiperTarget || !thumbSwiperTarget) return;
+
+		const thumbSwiper = new Swiper(thumbSwiperTarget, {
+			slidesPerView: "auto",
+			spaceBetween: 4,
+		});
+
+		const mainSwiper = new Swiper(mainSwiperTarget, {
+			modules: [Pagination, Navigation, Thumbs],
+			slidesPerView: 1,
+			loop: true,
+			speed: 600,
+			spaceBetween: 0,
+			thumbs: {
+				swiper: thumbSwiper,
+			},
+			navigation: {
+				nextEl: ".product-hero2_swiper-btn.is-next",
+				prevEl: ".product-hero2_swiper-btn.is-prev",
 			},
 		});
 	});
@@ -449,4 +481,188 @@ export function thingsToWatchLandingSlider() {
 			},
 		});
 	}
+}
+
+export function boothFeaturesSlider() {
+	const swiperTarget = document.querySelector('[data-features-slider="target"]');
+
+	if (!swiperTarget) return;
+
+	const swiper = new Swiper(swiperTarget, {
+		modules: [Navigation, Autoplay],
+		autoplay: {
+			delay: 3000,
+		},
+		loop: true,
+		slidesPerView: 1.3,
+		speed: 800,
+		spaceBetween: 20,
+		breakpoints: {
+			768: {
+				centeredSlides: true,
+				slidesPerView: 4,
+			},
+			992: {
+				slidesPerView: 4.2,
+				centeredSlides: true,
+				spaceBetween: 32,
+			},
+		},
+		navigation: {
+			nextEl: ".features-slider_swiper-btn.is-next",
+			prevEl: ".features-slider_swiper-btn.is-prev",
+		},
+	});
+}
+
+export function gallerySlider() {
+	const swiperTargets = document.querySelectorAll('[data-swiper-target="gallery"]');
+
+	if (!swiperTargets.length) return;
+
+	swiperTargets.forEach((target) => {
+		const swiper = new Swiper(target, {
+			modules: [Navigation, Autoplay],
+			autoplay: {
+				delay: 3000,
+			},
+			slidesPerView: 1.1,
+			speed: 800,
+			spaceBetween: 20,
+			breakpoints: {
+				768: {
+					slidesPerView: 1.5,
+				},
+				992: {
+					spaceBetween: 32,
+					slidesPerView: "auto",
+				},
+			},
+		});
+
+		// Get all navigation buttons
+		const prevButtons = document.querySelectorAll(".gallery-slider_cursor-nav-btn.prev, .gallery-slider_nav-btn.prev");
+		const nextButtons = document.querySelectorAll(".gallery-slider_cursor-nav-btn.next, .gallery-slider_nav-btn.next");
+
+		// Function to update disabled states
+		const updateNavigationState = () => {
+			const isBeginning = swiper.isBeginning;
+			const isEnd = swiper.isEnd;
+
+			// Update prev buttons
+			prevButtons.forEach((button) => {
+				if (isBeginning) {
+					button.classList.add("is-disabled");
+				} else {
+					button.classList.remove("is-disabled");
+				}
+			});
+
+			// Update next buttons
+			nextButtons.forEach((button) => {
+				if (isEnd) {
+					button.classList.add("is-disabled");
+				} else {
+					button.classList.remove("is-disabled");
+				}
+			});
+		};
+
+		// Add event listeners for navigation
+		prevButtons.forEach((button) => {
+			button.addEventListener("click", (e) => {
+				e.preventDefault();
+				if (!button.classList.contains("is-disabled")) {
+					swiper.slidePrev();
+				}
+			});
+		});
+
+		nextButtons.forEach((button) => {
+			button.addEventListener("click", (e) => {
+				e.preventDefault();
+				if (!button.classList.contains("is-disabled")) {
+					swiper.slideNext();
+				}
+			});
+		});
+
+		// Listen to swiper events to update navigation state
+		swiper.on("slideChange", updateNavigationState);
+		swiper.on("reachBeginning", updateNavigationState);
+		swiper.on("reachEnd", updateNavigationState);
+		swiper.on("fromEdge", updateNavigationState);
+
+		// Set initial state
+		updateNavigationState();
+	});
+}
+
+export function productCompareSlider() {
+	const swiperTargets = document.querySelectorAll('[data-swiper-target="product-compare"]');
+
+	if (!swiperTargets.length) return;
+
+	swiperTargets.forEach((target) => {
+		const swiper = new Swiper(target, {
+			slidesPerView: 1.05,
+			speed: 800,
+			spaceBetween: 4,
+			breakpoints: {
+				768: {
+					slidesPerView: 1.5,
+				},
+			},
+		});
+	});
+}
+
+export function soundFeaturesSlider() {
+	const swiperTargets = document.querySelectorAll('[data-swiper-target="sound-features"]');
+
+	if (!swiperTargets.length) return;
+
+	let swiperInstances = [];
+	let initBreakpoint = 991;
+
+	function initSwipers() {
+		swiperTargets.forEach((target) => {
+			const swiper = new Swiper(target, {
+				modules: [Autoplay],
+				autoplay: {
+					delay: 3000,
+				},
+				slidesPerView: 1.3,
+				speed: 800,
+				spaceBetween: 20,
+				breakpoints: {
+					768: {
+						slidesPerView: 1.5,
+					},
+				},
+			});
+
+			swiperInstances.push(swiper);
+		});
+	}
+
+	function destroySwipers() {
+		swiperInstances.forEach((instance) => {
+			instance.destroy(true, true);
+		});
+	}
+
+	function breakpointHandler() {
+		const viewportWidth = window.innerWidth;
+		if (viewportWidth <= initBreakpoint) {
+			initSwipers();
+		} else {
+			destroySwipers();
+		}
+	}
+
+	// Init or not init swiper on page load
+	breakpointHandler();
+
+	window.addEventListener("resize", breakpointHandler);
 }

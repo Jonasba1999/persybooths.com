@@ -144,8 +144,14 @@ export function quoteFormQtyInput() {
 		// Set default value of 0 to qty input
 		inputField.value = 0;
 
-		minusBtn.addEventListener("click", () => qtyDecrease(inputField));
-		plusBtn.addEventListener("click", () => qtyIncrease(inputField));
+		minusBtn.addEventListener("click", (e) => {
+			e.preventDefault();
+			qtyDecrease(inputField);
+		});
+		plusBtn.addEventListener("click", (e) => {
+			e.preventDefault();
+			qtyIncrease(inputField);
+		});
 	});
 
 	// Additional function to increase qty field value when inner product Quote button is clicked
@@ -153,7 +159,7 @@ export function quoteFormQtyInput() {
 	if (productQuoteBtns) {
 		productQuoteBtns.forEach((btn) => {
 			const productName = btn.getAttribute("data-product-quote-btn");
-			const inputField = document.querySelector(`#${productName}`);
+			const inputField = document.querySelector(`[data-product-quote-input="${productName}"]`);
 
 			btn.addEventListener("click", () => {
 				if (parseInt(inputField.value) === 0) {
