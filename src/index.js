@@ -26,6 +26,7 @@ import {
 	gallerySlider,
 	productCompareSlider,
 	soundFeaturesSlider,
+	accordionSyncImagesSlider,
 } from "./modules/sliders.js";
 import { customCursorAnimation } from "./modules/cursor.js";
 import { customFormValidation, quoteFormQtyInput, formUTMparameters, formPageField, customFormSelect } from "./modules/forms.js";
@@ -687,6 +688,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	boothSoundCompare();
 	soundFeaturesSlider();
 	imageParallaxAnimation();
+	accordionSyncImagesSlider();
 	setTimeout(() => {
 		ScrollTrigger.sort();
 		ScrollTrigger.refresh();

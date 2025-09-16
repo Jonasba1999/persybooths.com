@@ -663,3 +663,34 @@ export function soundFeaturesSlider() {
 
 	window.addEventListener("resize", breakpointHandler);
 }
+
+export function accordionSyncImagesSlider() {
+	const swiperTargets = document.querySelectorAll('[data-swiper-target="accordion-img-sync"]');
+
+	if (!swiperTargets.length) return;
+
+	swiperTargets.forEach((target) => {
+		const accordionSyncName = target.getAttribute("data-accordion-sync");
+		const accordionSyncInstance = document.querySelector(`[data-swiper-sync="${accordionSyncName}"]`);
+
+		const swiper = new Swiper(target, {
+			// allowTouchMove: false,
+			modules: [EffectFade],
+			effect: "fade",
+			fadeEffect: {
+				crossFade: true, // This ensures proper fade transition
+			},
+			speed: 600,
+			slidesPerView: 1,
+			spaceBetween: 0,
+		});
+
+		if (accordionSyncInstance) {
+			accordionSyncInstance.addEventListener("accordionChange", (e) => {
+				const { activeIndex, animationDuration } = e.detail;
+
+				swiper.slideTo(activeIndex, animationDuration);
+			});
+		}
+	});
+}
