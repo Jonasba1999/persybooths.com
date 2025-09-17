@@ -32,8 +32,10 @@ export function externalVideoPlayer() {
 		if (videoURL) {
 			const sourceEl = videoEl.querySelector("source");
 			sourceEl.src = videoURL;
-			videoEl.load();
 		}
+
+		videoEl.load();
+
 		videoButton.addEventListener("click", (e) => {
 			e.preventDefault();
 
