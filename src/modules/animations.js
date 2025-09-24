@@ -509,6 +509,7 @@ export function boothSoundCompare() {
 	const envControlsWrap = document.querySelector(".product-sound_env-controls");
 
 	let isPlaying = false;
+	let currentActiveEnvironment = "outside"; // Track the currently active environment
 
 	let soundWaveTl;
 
@@ -597,6 +598,23 @@ export function boothSoundCompare() {
 		});
 	}
 
+	// Handle window resize to adjust active background position
+	function handleResize() {
+		// Find the currently active button based on the environment state
+		const activeButton = document.querySelector(`[data-sound-environment="${currentActiveEnvironment}"]`);
+		if (activeButton) {
+			const buttonWidth = activeButton.offsetWidth;
+			setEnvironmentActiveBtn(buttonWidth, activeButton);
+		}
+	}
+
+	// Add resize event listener with debouncing for better performance
+	let resizeTimeout;
+	window.addEventListener("resize", () => {
+		clearTimeout(resizeTimeout);
+		resizeTimeout = setTimeout(handleResize, 100);
+	});
+
 	playButton.addEventListener("click", () => {
 		toggleAudio();
 	});
@@ -611,7 +629,9 @@ export function boothSoundCompare() {
 
 		button.addEventListener("click", () => {
 			toggleEnvironment(environment);
-			setEnvironmentActiveBtn(buttonWidth, button);
+			currentActiveEnvironment = environment; // Update the active environment state
+			const currentButtonWidth = button.offsetWidth; // Get current width, not cached width
+			setEnvironmentActiveBtn(currentButtonWidth, button);
 		});
 	});
 

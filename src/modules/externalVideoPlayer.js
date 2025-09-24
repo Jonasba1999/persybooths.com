@@ -19,6 +19,18 @@ export function externalVideoPlayer() {
 		}
 	}
 
+	function toggleVideoControls(videoButton, videoEl, action) {
+		if (action === "play") {
+			videoButton.style.opacity = 0;
+			videoButton.style.pointerEvents = "none";
+			videoEl.controls = true;
+		} else {
+			videoButton.style.opacity = 100;
+			videoButton.style.pointerEvents = "auto";
+			videoEl.controls = false;
+		}
+	}
+
 	externalVideos.forEach((externalVideo) => {
 		// Set video SRC from data attribute if there is one (for components like slider)
 		const videoURL = externalVideo.dataset.externalVideoWrap;
@@ -42,7 +54,11 @@ export function externalVideoPlayer() {
 			const action = videoButton.dataset.externalVideoBtn;
 
 			toggleVideo(videoEl, action);
-			toggleBtnState(videoButton, action);
+			toggleVideoControls(videoButton, videoEl, action);
+		});
+
+		videoEl.addEventListener("pause", () => {
+			toggleVideoControls(videoButton, videoEl, "pause");
 		});
 
 		videoEl.addEventListener("ended", () => {
