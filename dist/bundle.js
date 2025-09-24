@@ -16456,10 +16456,6 @@
     function initSwipers() {
       swiperTargets.forEach((target) => {
         const swiper = new Swiper(target, {
-          modules: [Autoplay],
-          autoplay: {
-            delay: 3e3
-          },
           slidesPerView: 1.3,
           speed: 800,
           spaceBetween: 20,

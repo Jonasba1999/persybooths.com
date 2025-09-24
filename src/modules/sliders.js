@@ -625,10 +625,6 @@ export function soundFeaturesSlider() {
 	function initSwipers() {
 		swiperTargets.forEach((target) => {
 			const swiper = new Swiper(target, {
-				modules: [Autoplay],
-				autoplay: {
-					delay: 3000,
-				},
 				slidesPerView: 1.3,
 				speed: 800,
 				spaceBetween: 20,
