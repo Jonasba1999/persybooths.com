@@ -44,7 +44,6 @@ import {
 	aboutCardsExpand,
 	productFeaturesVideo,
 	initStackingNav,
-	boothSoundCompare,
 	imageParallaxAnimation,
 } from "./modules/animations.js";
 import { accordionAnimation } from "./modules/accordion.js";
@@ -53,6 +52,7 @@ import { overlayScrollbar } from "./modules/scrollbar.js";
 import { displayCurrentYear, getCartCount } from "./modules/utils.js";
 import { externalVideoPlayer } from "./modules/externalVideoPlayer.js";
 import { productCompare } from "./modules/productCompare.js";
+import { soundCompare } from "./modules/soundCompare.js";
 
 function sideModalAnimation() {
 	// Getting all modals on the page
@@ -685,7 +685,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	externalVideoPlayer();
 	productCompare();
 	productCompareSlider();
-	boothSoundCompare();
+	soundCompare();
 	soundFeaturesSlider();
 	imageParallaxAnimation();
 	accordionSyncImagesSlider();
